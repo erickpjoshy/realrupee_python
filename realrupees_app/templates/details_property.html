@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/details.css' %}">
+   
+
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    
+    <title>Property Details </title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+
+    <style>
+        @import 'https://fonts.googleapis.com/css?family=Montserrat|Open+Sans';
+
+
+        body{
+            font-family: 'Montserrat', sans-serif;
+            background-color: #e6e6e6;
+
+        }
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color:#111;
+}
+
+.navbar-brand img {
+    height:90px;
+    width: 90px;
+}
+.navbar-brand {
+    padding: 0;  /* Adjust this value as needed */
+}
+
+/* Adjust padding for all nav items */
+.navbar-nav .nav-item .nav-link {
+    padding-left: 10px; /* Left padding, adjust as needed */
+    padding-right: 10px; /* Right padding, adjust as needed */
+}
+
+/* Optionally, adjust the padding of the entire navbar */
+.navbar {
+    padding-top: 0; /* Top padding */
+    padding-bottom: 0; /* Bottom padding */
+}
+
+.navbar-nav {
+    text-align: center;
+}
+
+.navbar-nav .nav-item {
+    display: inline-block;
+}
+
+@media (max-width: 767px) {
+    .navbar-nav {
+        text-align: left;
+    }
+    .navbar-nav .nav-item {
+        display: block;
+    }
+    .navbar{
+        padding:10px;
+    }
+}
+@media (max-width: 767px) {
+    .navbar-nav {
+        text-align: center;
+        flex-direction: column;
+    }
+    .navbar {
+        padding: 0.5rem 1rem; /* Reduce padding on smaller screens */
+    }
+    .card-body, .gallery, .embed-responsive {
+        padding: 0 15px; /* Add padding to ensure content doesn't touch the edges */
+    }
+}
+
+
+
+        .whatsapp-icon {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999; /* Ensure it appears above other content */
+}
+.image-container {
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 75%; 
+    }
+
+    .image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        /*width: 100%;*/
+        /*height: 100%;*/
+       
+        transition: transform 0.3s ease;
+    }
+
+    .image:hover {
+        transform: scale(1.1);
+    }
+   @media (max-width: 768px) {
+    .modal-dialog {
+        width: 95%; /* Allow a bit of margin */
+        max-width: none; /* Overrides Bootstrap's default max-width */
+    }
+    .heading-section{
+        font-size:22px;
+    }
+   
+}
+.image-container {
+    margin-bottom: 20px;
+}
+.badge {
+    position: absolute;
+    top: 10px; /* Adjust top position as needed */
+    left: 10px; /* Adjust left position as needed */
+}
+.card-date {
+    margin-top: 10px; /* Adjust this value to increase or decrease the gap */
+    display: block;
+}
+.prop-card p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;  /* Limits to 2 lines of text */
+    -webkit-box-orient: vertical;
+    height: 1.8em;  /* Adjust based on your font-size and line-height */
+}
+@media (max-width: 576px) {
+    .property-card {
+        min-width: 100%;  /* Full width on smaller screens */
+    }
+    .prop-card p {
+        -webkit-line-clamp: 3;  /* Allow more lines on smaller screens */
+    }
+    
+}
+.btn-custom {
+    background-color: #003300;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.btn-custom:hover {
+    background-color: #003300;
+    color: white;
+}
+@media (max-width: 576px) {
+  .btn-custom {
+        padding: 8px 16px; /* Adjust button padding for smaller screens */
+    }
+    .card-body {
+        padding: 5px;
+    }
+}
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark  fixed-top">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle for better mobile display -->
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/logo.png.png' %}" alt="Logo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collect the nav links and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav justify-content-center w-100">
+                <li class="nav-item"><a class="nav-link" href="/" style="color:#fff;">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'property' %}" style="color:#fff;">Property</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}" style="color:#fff;">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'contact_us' %}" style="color:#fff;">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'test' %}"style="color:#fff;">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link" href="tel:+1234567890"style="color:#fff;"><i class="fas fa-phone-alt"></i>9747858495</a></li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+    
+
+    <div class="whatsapp-icon">
+        <a href="javascript:void(0);" id="whatsapp-button">
+            <img src="{% static 'images/WhatsApp_icon.png.webp' %}" alt="whatsapp_logo"
+                style="width: 70px; height: 70px;">
+        </a>
+    </div><br><br><br>
+   
+    <div class="container-fluid">
+        <h1 style="text-align: center; margin-top: 70px;" class="heading-section">{{ property.heading }}</h1><br>
+        <div class ="container-fluid property_image" style="background-color:#fff;">
+        <div class="row">
+            <div class="col-lg-6 pt-5" style="margin-top: 30px;">
+<div class="gallery row mt-3">
+<div class="col-md-12">
+<div class="image-container">
+    {% if property.images.all.first %}
+    <img src="{{ property.images.all.first.image.url }}" alt="Large Image" class="image img-fluid" onclick="openModal('{{ property.images.all.first.image.url }}')" >
+    {% else %}
+    <p>No Image</p>
+    {% endif %}
+</div>
+                    </div>
+                    {% for img in property.images.all|slice:"1:" %}
+                    <div class="col-md-4">
+                        <br>
+                        <div class="image-container">
+                            <br>
+                            {% if img.image %}
+                                <img src="{{ img.image.url }}" alt="Small Image" class="image img-fluid" onclick="openModal('{{ img.image.url }}')">
+                            {% else %}
+                                <p>No Image</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="button-section text-center" style="margin-top: 10px; margin-bottom:20px;">
+<button class="btn " style="width: 250px; background-color: #19e019;color: #FFFFFF;" onclick="sendWhatsAppEnquiry('{{ property.heading }}', '{{ property.property_id }}')">Send Enquiry</button>
+</div>
+        </div>
+             <div class="col-lg-6 pt-5">
+                 <div class="card" style="background-color: #FFFFFF; border:none;">
+                    <div class="card-body">
+                        <h3 class="card-title" style="font-size: 25px; margin-top: 15px;">{{ property.subheading }}</h3>
+                        <div class="card-info">
+                            <div class="location">
+                                <i class="fas fa-map-marker-alt" style="margin-top: 15px;"></i> {{ property.district.name }} <span style="margin-left: 50px; color: #002200;font-size: 20px;"></span>
+                            </div>
+                            <p style="margin-top: 20px; font-size: 25px;">{{ property.paragraph|safe }}</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            <div class="cards mt-5" style="padding: 30px;background-color: #FFFFFF;">
+                    <h2 class="mt-3">Additional Details</h2>
+                    <ul style="margin-top: 30px;">
+                        <!-- <li style="font-size: 20px;">Property Id: {{ property.property_id }}</li><br> -->
+                        <li style="font-size: 20px;">Property Price: {{ property.price }}</li><br>
+                        <li style="font-size: 20px;">Property Type: {{ property.type }}</li><br>
+                        <li style="font-size: 20px;">Property District:{{ property.district.name }}</li><br>
+                        <li style="font-size: 20px;">Property Location: {{ property.locality.name }}</li><br>
+                    </ul>
+
+                </div>
+                
+             </div>
+            
+
+        </div>
+                                    
+        </div>
+        
+
+</div>
+<div class="container">
+        <div class="row" style="margin-top: 30px;">
+            
+            <div class="col-lg-12" style="margin-top: 30px;">
+                <h2>Video</h2>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe width="70%" height="105" src="{{ property.youtube_url }}" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe>
+                </div>
+               
+            </div>
+        </div>    
+</div>
+
+
+    
+    
+        </div>
+    </div>
+    
+    <div class="container mt-5">
+    <h1 style="text-align: center;">Our Top Properties</h1><br>
+    <div class="row">
+        {% for prop in properties %}
+        <div class="col-md-4 pt-5">
+            <div class="card position-relative property-card h-100">
+                <div class="image-containers">
+                    {% if prop.images.all %}
+                    <img src="{{ prop.images.all.first.image.url }}" class="card-img-top" alt="{{ prop.heading }}">
+                    {% else %}
+                    <span class="badge badge-primary" style="background-color: #19e019;">No Image</span>
+                    {% endif %}
+                    {% if prop.status == 'Sold' %}
+                    <span class="badge badge-primary" style="background-color: red;">{{ prop.status }}</span>
+                    {% else %}
+                    <span class="badge badge-primary" style="background-color: green;">{{ prop.status }}</span>
+                    {% endif %}
+                </div>
+<div class="card-body prop-card">
+    <h3>{{ prop.heading }}</h3>
+    <p>{{ prop.paragraph|safe }}</p>  <!-- Truncate the paragraph after 6 words -->
+    <div class="location">
+        <i class="fas fa-map-marker-alt"></i> {{ prop.district.name }}
+    </div>
+    <p class="card-text" style="color: darkred;">ID: {{ prop.property_id }}</p>
+    <a href="{% url 'details_property' property_id=prop.id %}" class="btn btn-custom">View More</a>
+</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div><br>
+    
+
+    
+        <!-- The Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+    
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">IMAGES</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <img id="modalImage" src="" alt="Modal Image" class="img-fluid">
+                    </div>
+    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    </div><br>
+<section class="footer mt-5">
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-cta pt-5 pb-5">
+                <div class="row">
+               </div>
+            </div>
+            <div class="footer-content pt-5 pb-5">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 mb-50">
+                        <div class="footer-widget">
+                          <br><br>  <div class="footer-logo">
+                                <a href=""><img src="{% static 'images/logo.png.png' %}" class="img-fluid" alt="logo"></a>
+                            </div>
+                            <br><br><br>
+                        </div>
+                    </div> 
+     
+                         <br>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+                        <div class="footer-widget">
+                            <div class="footer-widget-heading">
+                                <h3>Useful Links</h3>
+                            </div>
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'about_us' %}">about Us</a></li>
+                                <li><a href="{% url 'property' %}">Property</a></li>
+                                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                                <li><a href="{% url 'test' %}">Testimonals</a></li>
+                                
+                            </ul>
+                        </div>
+                    </div><br>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
+                        
+                            <div class="single-cta">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="cta-text">
+                                    <h4>Find us</h4>
+                                    <span>Chevoor, Thrissur Dt.Pin: 680 027</span>
+                                </div>
+                            </div>
+                            <br><br>
+                            
+                            <div class="single-cta">
+                            <i class="fas fa-phone"></i>
+                            <div class="cta-text">
+                                <h4>Call us</h4>
+                                <span> 9747858495</span>
+                            </div>
+                        </div>
+                        <br><br>
+                        
+                        <div class="single-cta">
+                            <i class="far fa-envelope-open"></i>
+                            <div class="cta-text">
+                                <h4>Mail us</h4>
+                                <span> mail@realrupees.com</span>
+                            </div>
+                        </div>
+                        <br><br>
+                       
+                        
+                        </div>
+                        
+                    </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 text-center text-lg-left">
+                        <div class="copyright-text">
+                            <p>Copyright &copy; 2024, Devolped By <a href="https://softverses.com/" target="_blank">Softverses</a></p>
+                        </div>
+                    </div>
+                    <!-- <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                        <div class="footer-menu">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="#">Terms</a></li>
+                                <li><a href="#">Privacy</a></li>
+                                <li><a href="#">Policy</a></li>
+                                <li><a href="#">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</section>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script>
+    
+    document.getElementById("whatsapp-button").addEventListener("click", function () {
+          var phoneNumber = "+91 9747858495";
+          var message = "Hello, I'd like to get in touch with you!";
+          var url = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
+          window.open(url, "_blank");
+      });
+
+      // Function to open the modal
+// Function to open the modal and display the image
+function openModal(imageSrc) {
+    document.getElementById('modalImage').src = imageSrc;
+    $('#myModal').modal('show'); // Open the modal
+}
+
+// Function to close the modal
+function closeModal() {
+    $('#myModal').modal('hide'); // Close the modal
+}
+
+// Function to close the modal
+function closeModal() {
+    document.getElementById("myModal").style.display = "none";
+}
+function sendWhatsAppEnquiry(propertyName, propertyId) {
+    // Construct WhatsApp message
+    var message = "Hi, I'm interested in property '" + propertyName + "' (ID: " + propertyId + "). Can you please provide more details?";
+
+    // Encode message for URL
+    var encodedMessage = encodeURIComponent(message);
+
+    // Construct WhatsApp URL
+    var whatsappUrl = "https://api.whatsapp.com/send?phone=+919747858495&text=" + encodedMessage; // Replace with the actual WhatsApp number
+
+    // Open WhatsApp in new tab
+    window.open(whatsappUrl, "_blank");
+}
+
+
+</script>
+

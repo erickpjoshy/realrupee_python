@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+
+
+    <title>login </title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+
+    <style>
+        @import 'https://fonts.googleapis.com/css?family=Montserrat|Open+Sans';
+
+
+        body{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color:#111;
+}
+
+.navbar-brand img {
+    height:90px;
+    width: 90px;
+}
+.navbar-brand {
+    padding: 0;  /* Adjust this value as needed */
+}
+
+/* Adjust padding for all nav items */
+.navbar-nav .nav-item .nav-link {
+    padding-left: 10px; /* Left padding, adjust as needed */
+    padding-right: 10px; /* Right padding, adjust as needed */
+}
+
+/* Optionally, adjust the padding of the entire navbar */
+.navbar {
+    padding-top: 0; /* Top padding */
+    padding-bottom: 0; /* Bottom padding */
+}
+
+.navbar-nav {
+    text-align: center;
+}
+
+.navbar-nav .nav-item {
+    display: inline-block;
+}
+
+@media (max-width: 767px) {
+    .navbar-nav {
+        text-align: left;
+    }
+    .navbar-nav .nav-item {
+        display: block;
+    }
+    .navbar{
+        padding:10px;
+    }
+}
+
+
+        .whatsapp-icon {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999; /* Ensure it appears above other content */
+}
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark  fixed-top">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle for better mobile display -->
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/logo.png.png' %}" alt="Logo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collect the nav links and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav justify-content-center w-100">
+                <li class="nav-item"><a class="nav-link" href="/" style="color:#fff;">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'property' %}" style="color:#fff;">Property</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}" style="color:#fff;">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'contact_us' %}" style="color:#fff;">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'test' %}"style="color:#fff;">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link" href="tel:+1234567890"style="color:#fff;"><i class="fas fa-phone-alt"></i>9747858495</a></li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+    <br><br>
+    <div class="login-container" style="margin-top: 40px; text-align: center;">
+        <form class="login-form" method="post" action="{% url 'admin_login' %}">
+            {% csrf_token %}
+            <h2>Admin Login</h2>
+            
+            <div class="form-group mt-3">
+                
+                <input type="text" placeholder="User Name" id="username" name="username" required style="width:50%;">
+            </div>
+            <div class="form-group mt-3">
+                
+                <input type="password" placeholder="Password" id="password" name="password" required style="width:50%;">
+            </div>
+            <div class="form-group mt-3">
+            <button type="submit" style="width:50%;">Login</button>    
+            </div>
+            
+        </form>
+    </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>

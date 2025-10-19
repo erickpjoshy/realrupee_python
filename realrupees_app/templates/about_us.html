@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}">
+
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+
+
+    
+    <title>About Us </title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+
+    <style>
+        @import 'https://fonts.googleapis.com/css?family=Montserrat|Open+Sans';
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color:#111;
+}
+
+.navbar-brand img {
+    height:90px;
+    width: 90px;
+}
+.navbar-brand {
+    padding: 0;  /* Adjust this value as needed */
+}
+
+/* Adjust padding for all nav items */
+.navbar-nav .nav-item .nav-link {
+    padding-left: 10px; /* Left padding, adjust as needed */
+    padding-right: 10px; /* Right padding, adjust as needed */
+}
+
+/* Optionally, adjust the padding of the entire navbar */
+.navbar {
+    padding-top: 0; /* Top padding */
+    padding-bottom: 0; /* Bottom padding */
+}
+
+.navbar-nav {
+    text-align: center;
+}
+
+.navbar-nav .nav-item {
+    display: inline-block;
+}
+
+@media (max-width: 767px) {
+    .navbar-nav {
+        text-align: left;
+    }
+    .navbar-nav .nav-item {
+        display: block;
+    }
+    .navbar{
+        padding:10px;
+    }
+}
+        .whatsapp-icon {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999; /* Ensure it appears above other content */
+}
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark  fixed-top">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle for better mobile display -->
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/logo.png.png' %}" alt="Logo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collect the nav links and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav justify-content-center w-100">
+                <li class="nav-item"><a class="nav-link" href="/" style="color:#fff;">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'property' %}" style="color:#fff;">Property</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}" style="color:#fff;">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'contact_us' %}" style="color:#fff;">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'test' %}"style="color:#fff;">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link" href="tel:+1234567890"style="color:#fff;"><i class="fas fa-phone-alt"></i>9747858495</a></li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+    <div class="whatsapp-icon">
+        <a href="javascript:void(0);" id="whatsapp-button">
+            <img src="{% static 'images/WhatsApp_icon.png.webp' %}" alt="whatsapp_logo"
+                style="width: 70px; height: 70px;">
+        </a>
+    </div><br><br>
+    <section class="about-us">
+        <div class="container" style="margin-top: 60px;">
+            <h2 style="text-align: center;">About Us</h2><br>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="image">
+                     <br><br><br>   <img src="{% static 'images/about.png' %}" alt="About Us Image">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="content">
+
+                        <h3>What is Realrupees.com?</h3>
+                        <p>Realrupees.com is an online real-estate service committed to helping you make wise and profitable decisions related to buying, selling, renting and leasing of properties, in India and key global geographies. Realrupees.com will provide a fresh new approach to our esteemed users to search for properties to buy or rent, and list their properties for selling or leasing.</p>
+                        <h3>What do we promise?</h3>
+                        <p>Realrupees.com promises to be the most preferred way of finding your dream property, and we are committed to help you make a wiser property decision, as a buyer or a seller. We want our esteemed users to realize over time that Makaan.com is an expert friend, who can help them make some of their biggest and important decisions in life in a sharper, faster and easier way.</p>
+
+                          <p style="color: rgb(34, 4, 4);">  The Realrupees.com team is committed to the following </p>
+                            
+                            » Understand the needs and concerns of Individuals, Agents & Builders and provide them a common platform for
+                                realizing maximum benefits from real-estate <br><br>
+                            
+                            » Provide a superior real-estate experience by making it easier, faster, secure and more accurate to find buyers for
+                                your valuable property, and sellers for the dream property you have been waiting <br><br>
+                            
+                            » Give our customers complete control through easy to use interfaces and features that can help them identify, filter
+                                and contact potential buyers and sellers for properties</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1>For more information about our services, <span style="color: #0dbb9e;">get in touch</span>
+                        with our expert consultants</h1><br>
+                    <p style="color: #3a3838;">Our friendly team is on hand to provide advice, guidance and support throughout every step of your journey in finding and buying a new house. Contact us today for more information about how we can help you!</p>
+                </div>
+                <br><br><br><br><div class="col-md-6">
+                    <div class="contact-info" style="display: flex; flex-direction: column; align-items: center;">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px; margin-left: 40px;">
+                            <i class="fas fa-phone" style="color: #0dbb9e; font-size: 44px; "></i>
+                           
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <p style="margin-right: 15px;">Call for help now!</p>
+                            <span style="font-size: 22px; color: #06020e; margin-bottom: 10px; margin-right: 15px;">+919747858495</span>
+                            <a href="{% url 'contact_us' %}" class="btn btn-primary">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </section>
+
+
+
+<section class="footer mt-5">
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-cta pt-5 pb-5">
+                <div class="row">
+               </div>
+            </div>
+            <div class="footer-content pt-5 pb-5">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 mb-50">
+                        <div class="footer-widget">
+                          <br><br>  <div class="footer-logo">
+                                <a href=""><img src="{% static 'images/logo.png.png' %}" class="img-fluid" alt="logo"></a>
+                            </div>
+                            <br><br><br>
+                        </div>
+                    </div> 
+     
+                         <br>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+                        <div class="footer-widget">
+                            <div class="footer-widget-heading">
+                                <h3>Useful Links</h3>
+                            </div>
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'about_us' %}">about Us</a></li>
+                                <li><a href="{% url 'property' %}">Property</a></li>
+                                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                                <li><a href="{% url 'test' %}">Testimonals</a></li>
+                                
+                            </ul>
+                        </div>
+                    </div><br>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
+                        
+                            <div class="single-cta">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="cta-text">
+                                    <h4>Find us</h4>
+                                    <span>Chevoor, Thrissur Dt.Pin: 680 027</span>
+                                </div>
+                            </div>
+                            <br><br>
+                            
+                            <div class="single-cta">
+                            <i class="fas fa-phone"></i>
+                            <div class="cta-text">
+                                <h4>Call us</h4>
+                                <span> 9747858495</span>
+                            </div>
+                        </div>
+                        <br><br>
+                        
+                        <div class="single-cta">
+                            <i class="far fa-envelope-open"></i>
+                            <div class="cta-text">
+                                <h4>Mail us</h4>
+                                <span> mail@realrupees.com</span>
+                            </div>
+                        </div>
+                        <br><br>
+                       
+                        
+                        </div>
+                        
+                    </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 text-center text-lg-left">
+                        <div class="copyright-text">
+                            <p>Copyright &copy; 2024, Devolped By <a href="https://softverses.com/" target="_blank">Softverses</a></p>
+                        </div>
+                    </div>
+                    <!-- <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                        <div class="footer-menu">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="#">Terms</a></li>
+                                <li><a href="#">Privacy</a></li>
+                                <li><a href="#">Policy</a></li>
+                                <li><a href="#">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</section>
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+          <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+          
+          document.getElementById("whatsapp-button").addEventListener("click", function () {
+                var phoneNumber = "+91 9747858495";
+                var message = "Hello, I'd like to get in touch with you!";
+                var url = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
+                window.open(url, "_blank");
+            });
+    
+            var swiper = new Swiper('.swiper-container', {
+                slidesPerView: 'auto',
+                spaceBetween: 30,
+                loop: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        </script>
+          </body>
+          </html>

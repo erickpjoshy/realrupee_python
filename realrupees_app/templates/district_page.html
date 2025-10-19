@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/property.css' %}">
+
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    
+    <title>Testimonals </title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet" />
+</head>
+
+    <style>
+        @import 'https://fonts.googleapis.com/css?family=Montserrat|Open+Sans';
+        body{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color:#111;
+}
+
+.navbar-brand img {
+    height:90px;
+    width: 90px;
+}
+.navbar-brand {
+    padding: 0;  /* Adjust this value as needed */
+}
+
+/* Adjust padding for all nav items */
+.navbar-nav .nav-item .nav-link {
+    padding-left: 10px; /* Left padding, adjust as needed */
+    padding-right: 10px; /* Right padding, adjust as needed */
+}
+
+/* Optionally, adjust the padding of the entire navbar */
+.navbar {
+    padding-top: 0; /* Top padding */
+    padding-bottom: 0; /* Bottom padding */
+}
+
+.navbar-nav {
+    text-align: center;
+}
+
+.navbar-nav .nav-item {
+    display: inline-block;
+}
+
+@media (max-width: 767px) {
+    .navbar-nav {
+        text-align: left;
+    }
+    .navbar-nav .nav-item {
+        display: block;
+    }
+    .navbar{
+        padding:10px;
+    }
+}
+
+        .whatsapp-icon {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999; /* Ensure it appears above other content */
+}
+
+.districts {
+    overflow: hidden;
+}
+
+.districts-inner {
+    display: flex;
+    gap: 10px;
+    animation: scroll 20s linear infinite;
+    width: max-content; /* Set width to fit all districts */
+}
+
+.district {
+    padding: 10px 20px;
+    background-color: #006B00;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.district:hover {
+    background-color: #004F00;
+}
+.btn-custom {
+    background-color: #bd4419;
+    color: #fff;
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-custom:hover {
+    background-color: #a9330c;
+    color: #fff;
+}
+
+/* Responsive Styling */
+@media screen and (max-width: 768px) {
+    .districts-inner {
+        animation: scroll 20s linear infinite;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .districts-inner {
+        animation: scroll 20s linear infinite;
+    }
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-100% + (100vw - 50%)));
+    }
+}
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Centers the pagination horizontally */
+    align-items: center; /* Vertically align items if needed */
+    padding: 20px 0; /* Add padding on top and bottom for spacing from other elements */
+}
+
+.pagination-container .btn {
+    margin: 0 10px; /* Horizontal margin between buttons */
+}
+
+.pagination-container .current-page {
+    margin: 0 20px; /* More noticeable margin around the current page indicator */
+}
+@media (max-width: 768px) {
+    .pagination-container {
+        flex-direction: column; /* Stack the elements vertically on smaller screens */
+    }
+    .pagination-container .btn,
+    .pagination-container .current-page {
+        margin-bottom: 10px; /* Adds vertical spacing between stacked elements */
+    }
+}
+.card-body p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;  /* Limits to 2 lines of text */
+    -webkit-box-orient: vertical;
+    height: 1.8em;  /* Adjust based on your font-size and line-height */
+}
+@media (max-width: 576px) {
+    .property-card {
+        min-width: 100%;  /* Full width on smaller screens */
+    }
+    .card-body p {
+        -webkit-line-clamp: 3;  /* Allow more lines on smaller screens */
+    }
+}
+
+
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark  fixed-top">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle for better mobile display -->
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/logo.png.png' %}" alt="Logo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collect the nav links and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav justify-content-center w-100">
+                <li class="nav-item"><a class="nav-link" href="/" style="color:#fff;">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'property' %}" style="color:#fff;">Property</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}" style="color:#fff;">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'contact_us' %}" style="color:#fff;">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'test' %}"style="color:#fff;">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link" href="tel:+1234567890"style="color:#fff;"><i class="fas fa-phone-alt"></i>9747858495</a></li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+
+    <div class="whatsapp-icon">
+        <a href="javascript:void(0);" id="whatsapp-button">
+            <img src="{% static 'images/WhatsApp_icon.png.webp' %}" alt="whatsapp_logo"
+                style="width: 70px; height: 70px;">
+        </a>
+    </div><br><br>
+<br><br>    
+<div class="container" style='margin-top:90px;'>
+    <h1 style="text-align: center;">Properties in {{ district.name }}</h1><br>
+    <div class="row">
+        {% for prop in properties %}
+        <div class="col-md-4 pt-5">
+            <div class="card position-relative property-card h-100">
+                <div class="image-container">
+                    {% if prop.images.all %}
+                    <img src="{{ prop.images.all.first.image.url }}" class="card-img-top" alt="{{ prop.heading }}">
+                    {% else %}
+                    <span class="badge badge-primary" style="background-color: #19e019;">No Image</span>
+                    {% endif %}
+                    {% if prop.status == 'Sold' %}
+                    <span class="badge badge-primary" style="background-color: red;">{{ prop.status }}</span>
+                    {% else %}
+                    <span class="badge badge-primary" style="background-color: green;">{{ prop.status }}</span>
+                    {% endif %}
+                </div>
+<div class="card-body">
+    <h3>{{ prop.heading }}</h3>
+    <p>{{ prop.paragraph|safe }}</p>  <!-- Truncate the paragraph after 6 words -->
+    <div class="location">
+        <i class="fas fa-map-marker-alt"></i> {{ prop.district.name }}
+    </div>
+    <p class="card-text" style="color: darkred;">ID: {{ prop.property_id }}</p>
+    <a href="{% url 'details_property' property_id=prop.id %}" class="btn btn-custom">View More</a>
+</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+<div class="pagination-container text-center">
+    {% if properties.has_previous %}
+        <a href="?page=1" class="btn btn-primary m-2">&laquo; First</a>
+        <a href="?page={{ properties.previous_page_number }}" class="btn btn-primary m-2">&lsaquo; Previous</a>
+    {% endif %}
+
+    <span class="current-page mx-3">Page {{ properties.number }} of {{ properties.paginator.num_pages }}</span>
+
+    {% if properties.has_next %}
+        <a href="?page={{ properties.next_page_number }}" class="btn btn-primary m-2">Next &rsaquo;</a>
+        <a href="?page={{ properties.paginator.num_pages }}" class="btn btn-primary m-2">Last &raquo;</a>
+    {% endif %}
+</div>
+
+</div>
+
+
+
+
+
+   
+    
+<section class="footer mt-5">
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-cta pt-5 pb-5">
+                <div class="row">
+               </div>
+            </div>
+            <div class="footer-content pt-5 pb-5">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 mb-50">
+                        <div class="footer-widget">
+                          <br><br>  <div class="footer-logo">
+                                <a href=""><img src="{% static 'images/logo.png.png' %}" class="img-fluid" alt="logo"></a>
+                            </div>
+                            <br><br><br>
+                        </div>
+                    </div> 
+     
+                         <br>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+                        <div class="footer-widget">
+                            <div class="footer-widget-heading">
+                                <h3>Useful Links</h3>
+                            </div>
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'about_us' %}">about Us</a></li>
+                                <li><a href="{% url 'property' %}">Property</a></li>
+                                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                                <li><a href="{% url 'test' %}">Testimonals</a></li>
+                                
+                            </ul>
+                        </div>
+                    </div><br>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
+                        
+                            <div class="single-cta">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="cta-text">
+                                    <h4>Find us</h4>
+                                    <span>Chevoor, Thrissur Dt.Pin: 680 027</span>
+                                </div>
+                            </div>
+                            <br><br>
+                            
+                            <div class="single-cta">
+                            <i class="fas fa-phone"></i>
+                            <div class="cta-text">
+                                <h4>Call us</h4>
+                                <span> 9747858495</span>
+                            </div>
+                        </div>
+                        <br><br>
+                        
+                        <div class="single-cta">
+                            <i class="far fa-envelope-open"></i>
+                            <div class="cta-text">
+                                <h4>Mail us</h4>
+                                <span> mail@realrupees.com</span>
+                            </div>
+                        </div>
+                        <br><br>
+                       
+                        
+                        </div>
+                        
+                    </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 text-center text-lg-left">
+                        <div class="copyright-text">
+                            <p>Copyright &copy; 2024, Devolped By <a href="https://softverses.com/" target="_blank">Softverses</a></p>
+                        </div>
+                    </div>
+                    <!-- <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                        <div class="footer-menu">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="#">Terms</a></li>
+                                <li><a href="#">Privacy</a></li>
+                                <li><a href="#">Policy</a></li>
+                                <li><a href="#">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</section>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+   
+  <script>
+
+    // Add move-animation class to districts container
+// Add click event listener to each district
+document.querySelectorAll('.district').forEach(function(district) {
+    district.addEventListener('click', function() {
+        // Replace 'district-page.html' with the actual URL of the district's page
+        window.location.href =  'district_page';
+    });
+});
+
+
+    
+    document.getElementById("whatsapp-button").addEventListener("click", function () {
+          var phoneNumber = "+91 9747858495";
+          var message = "Hello, I'd like to get in touch with you!";
+          var url = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
+          window.open(url, "_blank");
+      });
+</script>
+

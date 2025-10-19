@@ -1,0 +1,1 @@
+from realrupee.wsgi import application
