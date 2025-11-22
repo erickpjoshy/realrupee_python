@@ -514,29 +514,38 @@ def delete_testimonials(request, opening_id):
     return redirect('add_testimonials')
     
     
-    
 def add_images(request):
     if request.method == 'POST':
 
-        # Get form fields
         title = request.POST.get('title')
         description = request.POST.get('description')
+        media_type = request.POST.get('type')   # image or video
 
-        # Check if image is uploaded
         image = request.FILES.get('image')
+        video = request.FILES.get('video')
 
-        # Save to database
+        # Validation: If type is image, a file must be uploaded
+        if media_type == 'image' and not image:
+            messages.error(request, "Please upload an image.")
+            return redirect('add_images')
+
+        if media_type == 'video' and not video:
+            messages.error(request, "Please upload a video.")
+            return redirect('add_images')
+
+        # Create object
         GalleryImage.objects.create(
             title=title,
             description=description,
-            image=image
+            type=media_type,
+            image=image if media_type == 'image' else None,
+            video=video if media_type == 'video' else None,
         )
 
         return redirect('add_images')
 
     add_images = GalleryImage.objects.all()
     return render(request, 'add_awiper_img.html', {'add_images': add_images})
-
 
 
 def delete_gallery_image(request, opening_id):
