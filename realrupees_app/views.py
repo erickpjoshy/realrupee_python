@@ -557,13 +557,39 @@ def edit_gallery_image(request, opening_id):
     image_obj = GalleryImage.objects.get(id=opening_id)
 
     if request.method == 'POST':
-        image_obj.title = request.POST.get('title')
-        image_obj.description = request.POST.get('description')
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        media_type = request.POST.get('type')  # image or video
 
-        if 'image' in request.FILES:
-            image_obj.image = request.FILES['image']
+        new_image = request.FILES.get('image')
+        new_video = request.FILES.get('video')
+
+        # Validation: File must be uploaded if user chooses different type
+        if media_type == 'image' and not (new_image or image_obj.image):
+            messages.error(request, "Please upload an image.")
+            return redirect('edit_gallery_image', opening_id=opening_id)
+
+        if media_type == 'video' and not (new_video or image_obj.video):
+            messages.error(request, "Please upload a video.")
+            return redirect('edit_gallery_image', opening_id=opening_id)
+
+        # Update fields
+        image_obj.title = title
+        image_obj.description = description
+        image_obj.type = media_type
+
+        if media_type == 'image':
+            if new_image:  # Replace only if new file uploaded
+                image_obj.image = new_image
+            image_obj.video = None  # Remove old video if switching type
+
+        elif media_type == 'video':
+            if new_video:
+                image_obj.video = new_video
+            image_obj.image = None  # Remove old image if switching type
 
         image_obj.save()
+
         return redirect('add_images')
 
     return render(request, 'edit_gallery_image.html', {'image_obj': image_obj})
