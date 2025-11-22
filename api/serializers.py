@@ -55,7 +55,7 @@ class LocalitySerializer(serializers.ModelSerializer):
 class GalleryImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GalleryImage
-        fields = ['id', 'image']
+        fields = ['id', 'image', 'title', 'description', 'video', 'type']
 
 
 class TestimonialSerializer(serializers.ModelSerializer):

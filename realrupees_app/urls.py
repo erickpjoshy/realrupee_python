@@ -44,6 +44,7 @@ urlpatterns = [
     path('delete_testimonials/<int:opening_id>/',views.delete_testimonials,name='delete_testimonials'),
     path('add_images',views.add_images,name='add_images'),
     path('delete_gallery_image/<int:opening_id>',views.delete_gallery_image,name='delete_gallery_image'),
+    path('edit_gallery_image/<int:opening_id>/', views.edit_gallery_image, name='edit_gallery_image'),
     path('logout',views.logout,name='logout'),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 

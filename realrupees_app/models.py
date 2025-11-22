@@ -100,4 +100,42 @@ class Testimonial(models.Model):
 
 
 class GalleryImage(models.Model):
-    image = models.ImageField(upload_to='swiper_images/')
+
+    TYPE_CHOICES = (
+        ('image', 'Image'),
+        ('video', 'Video'),
+    )
+
+    image = models.ImageField(
+        upload_to='swiper_images/',
+        blank=True,
+        null=True
+    )
+
+    video = models.FileField(
+        upload_to='swiper_videos/',
+        blank=True,
+        null=True
+    )
+
+    type = models.CharField(
+        max_length=10,
+        choices=TYPE_CHOICES,
+        default='image'
+    )
+
+    title = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return self.title or "Gallery Item"
+
+

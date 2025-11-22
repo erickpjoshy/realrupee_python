@@ -518,28 +518,43 @@ def delete_testimonials(request, opening_id):
 def add_images(request):
     if request.method == 'POST':
 
-        
-        # Check if image is provided
-        if 'image' in request.FILES:
-            image = request.FILES['image']
-        else:
-            image = None  # Set image to None if not provided
-        
-        # Save the data to the database
-        service_content = GalleryImage.objects.create(
+        # Get form fields
+        title = request.POST.get('title')
+        description = request.POST.get('description')
 
-            image=image,
-            
+        # Check if image is uploaded
+        image = request.FILES.get('image')
+
+        # Save to database
+        GalleryImage.objects.create(
+            title=title,
+            description=description,
+            image=image
         )
-        # Redirect or do other actions after saving
-        return redirect('add_images')  # Replace 'success_page' with your actual success page URL
+
+        return redirect('add_images')
 
     add_images = GalleryImage.objects.all()
     return render(request, 'add_awiper_img.html', {'add_images': add_images})
-    
+
 
 
 def delete_gallery_image(request, opening_id):
     content = get_object_or_404(GalleryImage, id=opening_id)
     content.delete()
     return redirect('add_images')
+
+def edit_gallery_image(request, opening_id):
+    image_obj = GalleryImage.objects.get(id=opening_id)
+
+    if request.method == 'POST':
+        image_obj.title = request.POST.get('title')
+        image_obj.description = request.POST.get('description')
+
+        if 'image' in request.FILES:
+            image_obj.image = request.FILES['image']
+
+        image_obj.save()
+        return redirect('add_images')
+
+    return render(request, 'edit_gallery_image.html', {'image_obj': image_obj})
