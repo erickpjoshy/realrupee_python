@@ -145,24 +145,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <!-- Dynamic Show/Hide (Image/Video) -->
-    <script>
-      function toggleFields() {
-        var type = document.getElementById("mediaType").value;
-
-        if (type === "image") {
-          $("#imageSection").show();
-          $("#videoSection").hide();
-        } else {
-          $("#imageSection").hide();
-          $("#videoSection").show();
-        }
-      }
-
-      // Run on load
-      toggleFields();
-
-      // Run on change
-      document.getElementById("mediaType").addEventListener("change", toggleFields);
-    </script>
+    
   </body>
 </html>

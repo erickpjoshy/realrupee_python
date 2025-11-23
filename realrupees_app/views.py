@@ -519,27 +519,18 @@ def add_images(request):
 
         title = request.POST.get('title')
         description = request.POST.get('description')
-        media_type = request.POST.get('type')   # image or video
+        media_type = request.POST.get('type')   # keep type but do not restrict
 
         image = request.FILES.get('image')
         video = request.FILES.get('video')
 
-        # Validation: If type is image, a file must be uploaded
-        if media_type == 'image' and not image:
-            messages.error(request, "Please upload an image.")
-            return redirect('add_images')
-
-        if media_type == 'video' and not video:
-            messages.error(request, "Please upload a video.")
-            return redirect('add_images')
-
-        # Create object
+        # Create object (do not remove one based on type)
         GalleryImage.objects.create(
             title=title,
             description=description,
-            type=media_type,
-            image=image if media_type == 'image' else None,
-            video=video if media_type == 'video' else None,
+            type=media_type,   # still stored for display
+            image=image,       # save image if uploaded
+            video=video,       # save video if uploaded
         )
 
         return redirect('add_images')
@@ -559,37 +550,25 @@ def edit_gallery_image(request, opening_id):
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
-        media_type = request.POST.get('type')  # image or video
+        media_type = request.POST.get('type')  # Still stored but no restriction
 
         new_image = request.FILES.get('image')
         new_video = request.FILES.get('video')
 
-        # Validation: File must be uploaded if user chooses different type
-        if media_type == 'image' and not (new_image or image_obj.image):
-            messages.error(request, "Please upload an image.")
-            return redirect('edit_gallery_image', opening_id=opening_id)
-
-        if media_type == 'video' and not (new_video or image_obj.video):
-            messages.error(request, "Please upload a video.")
-            return redirect('edit_gallery_image', opening_id=opening_id)
-
-        # Update fields
+        # Update basic fields
         image_obj.title = title
         image_obj.description = description
         image_obj.type = media_type
 
-        if media_type == 'image':
-            if new_image:  # Replace only if new file uploaded
-                image_obj.image = new_image
-            image_obj.video = None  # Remove old video if switching type
+        # Save image if uploaded
+        if new_image:
+            image_obj.image = new_image
 
-        elif media_type == 'video':
-            if new_video:
-                image_obj.video = new_video
-            image_obj.image = None  # Remove old image if switching type
+        # Save video if uploaded
+        if new_video:
+            image_obj.video = new_video
 
         image_obj.save()
-
         return redirect('add_images')
 
     return render(request, 'edit_gallery_image.html', {'image_obj': image_obj})
