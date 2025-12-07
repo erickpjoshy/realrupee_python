@@ -101,7 +101,7 @@ class PropertyListAPIView(APIView):
 class PropertyDetailAPIView(APIView):
     def get(self, request, property_id):
         try:
-            property_instance = Add_Property.objects.get(property_id=property_id)
+            property_instance = Add_Property.objects.get(id=property_id)
         except Add_Property.DoesNotExist:
             return Response(
                 {"error": "Property not found."},
