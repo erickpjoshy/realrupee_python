@@ -414,11 +414,14 @@ class DeleteGalleryImageAPIView(APIView):
 
 
 
+class PropertyPagination(PageNumberPagination):
+    page_size = 10  # default items per page
+    page_size_query_param = 'page_size'  # allow client to change
+    max_page_size = 100
 
 
 class PropertySearchAPIView(APIView):
     def get(self, request):
-        # Accept all params via query_params
         property_type = request.query_params.get('property_type')
         state_id = request.query_params.get('state_id')
         district_id = request.query_params.get('district_id')
@@ -428,10 +431,9 @@ class PropertySearchAPIView(APIView):
         heading = request.query_params.get('heading')
         property_id = request.query_params.get('property_id')
 
-        # Start with all properties
         properties = Add_Property.objects.all()
 
-        # Apply filters
+        # Filters
         if property_type:
             properties = properties.filter(type=property_type)
         if state_id:
@@ -449,9 +451,12 @@ class PropertySearchAPIView(APIView):
         if property_id:
             properties = properties.filter(property_id__icontains=property_id)
 
-        # Build response
+        # ✅ Apply Pagination
+        paginator = PropertyPagination()
+        paginated_qs = paginator.paginate_queryset(properties, request)
+
         data = []
-        for p in properties:
+        for p in paginated_qs:
             images = [img.image.url for img in p.images.all()]
             data.append({
                 "id": p.id,
@@ -466,4 +471,4 @@ class PropertySearchAPIView(APIView):
                 "images": images,
             })
 
-        return Response({"properties": data})
+        return paginator.get_paginated_response(data)
