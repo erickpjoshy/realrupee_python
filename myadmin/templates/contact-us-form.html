@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="card">
+  <div class="card-header">
+    <h4>{% if contact %}Update{% else %}Add{% endif %} Contact Us</h4>
+  </div>
+  <div class="card-body">
+    <div class="card-wrapper border rounded-3">
+      <form method="post" class="row g-3">
+        {% csrf_token %}
+
+        <div class="col-md-6">
+          <label for="{{ form.name.id_for_label }}" class="form-label required-label">Name</label>
+          {{ form.name }}
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.email.id_for_label }}" class="form-label required-label">Email</label>
+          {{ form.email }}
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.phone_no.id_for_label }}" class="form-label required-label">Phone No</label>
+          {{ form.phone_no }}
+        </div>
+
+        <div class="col-md-12">
+          <label for="{{ form.message.id_for_label }}" class="form-label required-label">Message</label>
+          {{ form.message }}
+        </div>
+
+        <div class="col-12">
+          <button class="btn btn-primary" type="submit">Save</button>
+          <a class="btn btn-secondary" href="{% url 'contact-us-list' %}">Go Back</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('realrupees_app.urls')),
     path('api/', include('api.urls')),
+    path('myadmin/', include('myadmin.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

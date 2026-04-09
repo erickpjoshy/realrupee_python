@@ -1,0 +1,227 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Real Rupee">
+  <meta name="keywords"
+    content="Real Rupee">
+  <meta name="zoom-domain-verification" content="ZOOM_verify_77edf490e91948f2838039f88dde39b5">
+  <meta name="author" content="pixelstrap">
+  {% comment %} <link rel="icon" href="{% static 'favicon.png' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'favicon.png' %}" type="image/x-icon"> {% endcomment %}
+  <title>Real Rupee - Login</title>
+  <!-- Google font-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.css' %}">
+  <!-- ico-font-->
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/vendors/icofont.css' %}">
+  <!-- Themify icon-->
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/vendors/themify.css' %}">
+  <!-- Flag icon-->
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/vendors/flag-icon.css' %}">
+  <!-- Feather icon-->
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/vendors/feather-icon.css' %}">
+  <!-- Plugins css start-->
+  <!-- Plugins css Ends-->
+  <!-- Bootstrap css-->
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/vendors/bootstrap.css' %}">
+  <!-- App css-->
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+  <link id="color" rel="stylesheet" href="{% static 'assets/css/color-1.css' %}" media="screen">
+  <!-- Responsive css-->
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/responsive.css' %}">
+</head>
+
+<body>
+
+  <style>
+    .img-break {
+      width: 100% !important;
+    }
+
+    .login-card .login-main .theme-form input {
+      border: 1px solid #de5101 !important;
+
+    }
+    .img-fluid {
+    max-width: 265px;
+    height: auto;
+}
+.login-card{
+    background-color: #000 !important;
+    background-color: #ffffff !important;
+}
+
+.logo {
+  display: block;
+  text-align: right;
+}
+
+    .show-hide span {
+      color: #000000 !important;
+
+    }
+
+    .alert-dismissible .btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    padding: 13px 4px !important;
+}
+
+    .login-button {
+      color: #ffffff !important;
+      background-color: #00abd6 !important;
+      border: none;
+    }
+  
+
+    .login-button:hover {
+      background-color: #40678e !important;
+      border: none;
+      color: #fff !important;
+    }
+    #messages .success {
+    background-image: linear-gradient(to right, #00b09b, #96c93d) !important;
+    color: #ffffff !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    margin-bottom: 10px !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+    font-size: 12px !important;
+    margin-left: 15px !important;
+    max-width: fit-content !important;
+    margin-top: 1rem !important;
+}
+
+
+   #messages .error {
+    background-image: linear-gradient(to right, #ff416c, #ff4b2b) !important;
+    color: #ffffff !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    margin-bottom: 10px !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+    font-size: 12px !important;
+    margin-left: 15px !important;
+    max-width: fit-content !important;
+    margin-top: 1rem !important;
+}
+.socios{
+  height:20px;
+  width: 20px;
+}
+
+
+  </style>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+
+  <!-- login page start-->
+  <div class="container-fluid">
+    
+    <div class="row">
+      <div class="col-xl-7"><img class="bg-img-cover bg-center" src="{% static 'intro.jpg' %}"
+          alt="looginpage">
+      </div>
+      
+      <div class="col-xl-5 p-0" style="background: linear-gradient(to bottom, #000000, #434343) !important;">
+        <div id="messages">
+          {% for message in messages %}
+          <div
+            class="alert {{ message.tags }} alert-dismissible fade show"
+            role="alert"
+          >
+            {{ message }}
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="login-card login-dark">
+          
+          <div>
+            <div><a class="logo text-start" href="#">
+              <span style="color: #000000 !important; font-size:47px;"><Strong>Real Rupee</Strong></span>
+            </a></div>
+            <div class="login-main">
+              <form class="theme-form" method="post">
+                {% csrf_token %}
+                <h4>Sign in to account</h4>
+                <p>Enter your Username & Password to login</p>
+
+                <div class="form-group">
+                    <label class="col-form-label">Username</label>
+                    <input class="form-control" type="text" required placeholder="Enter your username" name="username">
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label">Password</label>
+                    <div class="form-input position-relative">
+                    <input class="form-control" type="password" name="password" id="passwordField" required placeholder="*********">
+                    <div class="show-hide" onclick="togglePasswordVisibility()">
+                        <span id="showHideIcon" class="show"></span>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+
+                <div class="form-group mb-0">
+                    <button class="btn btn-primary btn-block w-100 login-button" type="submit">
+                    Sign in
+                    </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- latest jquery-->
+  <script>
+    function togglePasswordVisibility() {
+        const passwordField = document.getElementById("passwordField");
+        const showHideIcon = document.getElementById("showHideIcon");
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+        } else {
+            passwordField.type = "password";
+        }
+    }
+</script>
+  <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+  <!-- Bootstrap js-->
+  <script src="{% static 'assets/js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+  <!-- feather icon js-->
+  <script src="{% static 'assets/js/icons/feather-icon/feather.min.js' %}"></script>
+  <script src="{% static 'assets/js/icons/feather-icon/feather-icon.js' %}"></script>
+  <!-- scrollbar js-->
+  <!-- Sidebar jquery-->
+  <script src="{% static 'assets/js/config.js' %}"></script>
+  <!-- Plugins JS start-->
+  <!-- calendar js-->
+  <!-- Plugins JS Ends-->
+  <!-- Theme js-->
+  <script src="{% static 'assets/js/script.js' %}"></script>
+  <!-- Plugin used-->
+  </div>
+</body>
+
+</html>

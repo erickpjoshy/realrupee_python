@@ -1,0 +1,175 @@
+{% extends 'myadmin/base.html' %}
+{% block content %}
+{% load static %}
+
+
+<!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Include select2 JS -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<!-- Toastify JS -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<div class="card">
+    <div class="card-header">
+      <h4>Banner</h4>
+      <p class="f-m-light mt-1">
+    </div>
+    <div class="card-body">
+      <div class="card-wrapper border rounded-3">
+        <form method="post" enctype="multipart/form-data" class="row g-3" id="banner_form">
+            {% csrf_token %}
+            
+            <div class="col-md-6">
+                <label for="{{ form.name.id_for_label }}" class="form-label required-label">Name</label>
+                {{ form.name }}
+            </div>
+
+            
+            <div class="col-md-6" id="image_div">
+                <label for="{{ form.image.id_for_label }}" class="form-label required-label">Image</label>
+                {{ form.image }}
+                <span class="badge badge-success">recommend size: 1440px * 590px ( File Size less than 1 MB)</span>
+            </div>
+
+
+            <div class="col-md-6">
+                <label for="{{ form.mobile_image.id_for_label }}" class="form-label required-label">Mobile Image</label>
+                {{ form.mobile_image }}
+                <span class="badge badge-success">recommend size: 500px * 800px ( File Size less than 1 MB)</span>
+            </div>
+
+
+            <div class="col-md-6">
+                <label for="{{ form.showing_order.id_for_label }}" class="form-label">Showing Order</label>
+                {{ form.showing_order }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="{{ form.url.id_for_label }}" class="form-label">URL</label>
+                {{ form.url }}
+            </div>
+
+           
+
+
+            
+
+           
+    
+            
+            
+            
+        <div class="col-12 mt-3 mb-3">
+            <button class="btn btn-primary" type="submit">Save</button>
+            <a class="btn btn-secondary" href="{{request.META.HTTP_REFERER}}">Go Back</a>
+        </div>
+            
+        </form>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  
+
+
+ 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const imageInputs = [
+            { id: 'id_image', maxWidth: 1440, maxHeight: 590 },
+            { id: 'id_mobile_image', maxWidth: 500, maxHeight: 800 }
+        ];
+
+        imageInputs.forEach(inputConfig => {
+            const input = document.getElementById(inputConfig.id);
+            if (!input) return;
+
+            input.addEventListener('change', function () {
+                const file = this.files[0];
+
+                if (file) {
+                    const allowedTypes = ["image/webp"];
+
+                    if (!allowedTypes.includes(file.type)) {
+                        input.value = ""; // Clear the file
+                        Toastify({
+                            text: "Invalid file type! Only WEBP is allowed.",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                        }).showToast();
+                        return;
+                    }
+
+                    const img = new Image();
+                    img.src = URL.createObjectURL(file);
+                    img.onload = () => {
+                        if (img.width > inputConfig.maxWidth || img.height > inputConfig.maxHeight) {
+                            input.value = ""; // Clear the invalid file
+                            Toastify({
+                                text: `Image resolution must not exceed ${inputConfig.maxWidth}x${inputConfig.maxHeight} pixels!`,
+                                duration: 3000,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                            }).showToast();
+                        }
+                    };
+                }
+            });
+        });
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+
+        fileInputs.forEach(input => {
+            input.addEventListener('change', function () {
+                const file = this.files[0]; // Get selected file
+
+                if (file) {
+                    // Check file type (Only .webp)
+                    
+                    // Check file size (Max: 400KB)
+                    if (file.size > 1024 * 1024) {
+                        this.value = ""; // Clear input
+                        Toastify({
+                            text: "File size must be 1mb or less!",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                        }).showToast();
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+
+
+{% endblock %}

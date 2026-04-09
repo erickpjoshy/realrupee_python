@@ -1,0 +1,298 @@
+{% extends 'base.html' %} {% load static %}
+
+{% block content %}
+
+<style>
+  .btn-danger-gradien {
+    background-color: rgba(237, 17, 17, 0.08) !important;
+    opacity: 0.8;
+    background-image: none !important;
+    border-radius: 22px !important;
+    padding: 0.375rem 0.75rem !important;
+}
+
+.btn-primary-gradien {
+  opacity: 0.8;
+  background-image: none !important;
+  border-radius: 22px !important;
+  padding: 0.375rem 0.75rem !important;
+}
+
+  .switch2 {
+ position: relative;
+ display: inline-block;
+ width: 90px;
+ height: 34px;
+}
+
+.switch2 input {display:none;}
+
+.slider2 {
+ position: absolute;
+ cursor: pointer;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background-color: #ca2222;
+ -webkit-transition: .4s;
+ transition: .4s;
+  border-radius: 34px;
+}
+
+.slider2:before {
+ position: absolute;
+ content: "";
+ height: 26px;
+ width: 26px;
+ left: 4px;
+ bottom: 4px;
+ background-color: white;
+ -webkit-transition: .4s;
+ transition: .4s;
+ border-radius: 50%;
+}
+
+input:checked + .slider2 {
+ background-color: #2c91ca;
+}
+
+input:focus + .slider2 {
+ box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider2:before {
+ -webkit-transform: translateX(26px);
+ -ms-transform: translateX(26px);
+ transform: translateX(55px);
+}
+
+.check-size{
+ width: 45px !important;
+ height: 24px !important;
+}
+
+/*------ ADDED CSS ---------*/
+.slider2:after
+{
+content:'A';
+color: white;
+display: block;
+position: absolute;
+transform: translate(-50%,-50%);
+top: 50%;
+left: 50%;
+font-size: 15px;
+font-family: Verdana, sans-serif;
+}
+
+.active-status {
+ background-color: #28a745; /* Green */
+ border-color: #28a745;
+}
+
+/* Red color for inactive doctors */
+.inactive-status {
+ background-color: #dc3545 !important; /* Red */
+ border-color: #dc3545 !important; 
+}
+
+/* Optional: change the appearance of the switch handle */
+.form-check-input:checked {
+ background-color: #28a745 !important; /* Green handle for checked (active) */
+ border-color: #28a745 !important;
+}
+
+.form-check-input:not(:checked) {
+ background-color: #dc3545 !important; /* Red handle for unchecked (inactive) */
+ border-color: #dc3545 !important;
+}
+
+</style>
+
+
+
+
+  {% if page == 'Contact Us' %}
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+              <a class="btn btn-primary" style="display: inline-block;" href="{% url 'contact-us-create' %}">Add</a>
+            <h4 style="text-align: center;">Contact Us</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive theme-scrollbar">
+              <table class="display" id="basic-1">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone No</th>
+                    <th>Message</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for contact in contacts %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ contact.name }}</td>
+                      <td>{{ contact.email }}</td>
+                      <td>{{ contact.phone_no }}</td>
+                      <td>{{ contact.message|truncatechars:50 }}</td>
+                      <td>
+                        <a class="btn btn-primary-gradien" href="{% url 'contact-us-update' contact.id %}">
+                          <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                        </a>
+                      </td>
+
+                      <td>
+                        <a onclick="showConfirmation('{% url 'contact-us-delete' contact.id %}')" <button type="button"
+                            class="btn btn-danger-gradien btn-sm btn-icon-text">
+                            <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                          </button>
+                        </a>
+                      </td>
+
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% endif %}
+
+
+  {% if page == 'State Name' %}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <a class="btn btn-primary" style="display: inline-block;" href="{% url 'state-name-create' %}">Add</a>
+            <h4 style="text-align: center;">State</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive theme-scrollbar">
+              <table class="display" id="basic-1">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for state in states %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ state.name }}</td>
+
+                      <td>
+                        <a class="btn btn-primary-gradien" href="{% url 'state-name-update' state.id %}">
+                          <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                        </a>
+                      </td>
+
+                      <td>
+                        <a onclick="showConfirmation('{% url 'state-name-delete' state.id %}')" <button type="button"
+                            class="btn btn-danger-gradien btn-sm btn-icon-text">
+                            <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                          </button>
+                        </a>
+                      </td>
+
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% endif %}
+
+
+  {% if page == 'District Name' %}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <a class="btn btn-primary" style="display: inline-block;" href="{% url 'district-name-create' %}">Add</a>
+            <h4 style="text-align: center;">Districts</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive theme-scrollbar">
+              <table class="display" id="basic-1">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>State</th>
+                    <th>District</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for district in districts %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ district.state.name }}</td>
+                      <td>{{ district.name }}</td>
+
+                      <td>
+                        <a class="btn btn-primary-gradien" href="{% url 'district-name-update' district.id %}">
+                          <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                        </a>
+                      </td>
+
+                      <td>
+                        <a onclick="showConfirmation('{% url 'district-name-delete' district.id %}')" <button type="button"
+                            class="btn btn-danger-gradien btn-sm btn-icon-text">
+                            <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                          </button>
+                        </a>
+                      </td>
+
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% endif %}
+
+
+    
+
+    
+
+
+
+
+
+  
+
+
+
+
+
+{% endblock content %}
