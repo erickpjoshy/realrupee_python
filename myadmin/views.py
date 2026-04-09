@@ -247,7 +247,7 @@ def district_name_delete(request, pk):
 def locality_list(request):
     page = 'Locality'
     localities = Locality.objects.all().order_by('state__name', 'district__name', 'name')
-    return render(request, 'myadmin/admin-list.html', {'localities': localities, 'page': page})
+    return render(request, 'admin-list.html', {'localities': localities, 'page': page})
 
 
 def locality_create(request):
@@ -261,7 +261,7 @@ def locality_create(request):
     else:
         form = LocalityForm()
 
-    return render(request, 'myadmin/locality-form.html', {'form': form})
+    return render(request, 'locality-form.html', {'form': form})
 
 
 def locality_update(request, pk):
@@ -283,3 +283,262 @@ def locality_delete(request, pk):
     locality = get_object_or_404(Locality, pk=pk)
     locality.delete()
     return redirect('locality-list')
+
+
+
+
+
+
+
+##################################### Property #############################################
+
+def property_list(request):
+    page = 'Property'
+    properties = Add_Property.objects.all().order_by('-id')
+    return render(request, 'admin-list.html', {'properties': properties, 'page': page})
+
+
+def property_create(request):
+    if request.method == "POST":
+        form = PropertyForm(request.POST)
+        if form.is_valid():
+            property_obj = form.save()
+            # handle multiple images
+            images = request.FILES.getlist('property_images')
+            for img in images:
+                image_obj = PropertyImage.objects.create(image=img)
+                property_obj.images.add(image_obj)
+            return redirect('property-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = PropertyForm()
+
+    return render(request, 'property-form.html', {'form': form})
+
+
+def property_update(request, pk):
+    property_obj = get_object_or_404(Add_Property, pk=pk)
+    if request.method == "POST":
+        form = PropertyForm(request.POST, instance=property_obj)
+        if form.is_valid():
+            form.save()
+            # add any new images uploaded
+            images = request.FILES.getlist('property_images')
+            for img in images:
+                image_obj = PropertyImage.objects.create(image=img)
+                property_obj.images.add(image_obj)
+            return redirect('property-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = PropertyForm(instance=property_obj)
+
+    existing_images = property_obj.images.all()
+    return render(request, 'property-form.html', {
+        'form': form,
+        'property': property_obj,
+        'existing_images': existing_images
+    })
+
+
+def property_delete(request, pk):
+    property_obj = get_object_or_404(Add_Property, pk=pk)
+    property_obj.delete()
+    return redirect('property-list')
+
+
+def property_image_delete(request, pk):
+    image = get_object_or_404(PropertyImage, pk=pk)
+    # get the property to redirect back
+    property_obj = image.properties.first()
+    image.delete()
+    if property_obj:
+        return redirect('property-update', pk=property_obj.pk)
+    return redirect('property-list')
+
+
+
+
+############################################## Dist Property ##################################################
+
+
+def dist_property_list(request):
+    page = 'Dist Property'
+    dist_properties = Add_Dist_Property.objects.all().order_by('-id')
+    return render(request, 'admin-list.html', {'dist_properties': dist_properties, 'page': page})
+
+
+def dist_property_create(request):
+    if request.method == "POST":
+        form = AddDistPropertyForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('dist-property-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = AddDistPropertyForm()
+
+    return render(request, 'dist-property-form.html', {'form': form})
+
+
+def dist_property_update(request, pk):
+    dist_property = get_object_or_404(Add_Dist_Property, pk=pk)
+    if request.method == "POST":
+        form = AddDistPropertyForm(request.POST, request.FILES, instance=dist_property)
+        if form.is_valid():
+            form.save()
+            return redirect('dist-property-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = AddDistPropertyForm(instance=dist_property)
+
+    return render(request, 'dist-property-form.html', {'form': form, 'dist_property': dist_property})
+
+
+def dist_property_delete(request, pk):
+    dist_property = get_object_or_404(Add_Dist_Property, pk=pk)
+    dist_property.delete()
+    return redirect('dist-property-list')
+
+
+
+
+
+######################################## Blog Content ############################################
+
+
+def blog_content_list(request):
+    page = 'Blog Content'
+    blogs = Blog_Content.objects.all().order_by('-date')
+    return render(request, 'admin-list.html', {'blogs': blogs, 'page': page})
+
+
+def blog_content_create(request):
+    if request.method == "POST":
+        form = BlogContentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('blog-content-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = BlogContentForm()
+
+    return render(request, 'blog-content-form.html', {'form': form})
+
+
+def blog_content_update(request, pk):
+    blog = get_object_or_404(Blog_Content, pk=pk)
+    if request.method == "POST":
+        form = BlogContentForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            form.save()
+            return redirect('blog-content-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = BlogContentForm(instance=blog)
+
+    return render(request, 'blog-content-form.html', {'form': form, 'blog': blog})
+
+
+def blog_content_delete(request, pk):
+    blog = get_object_or_404(Blog_Content, pk=pk)
+    blog.delete()
+    return redirect('blog-content-list')
+
+
+
+
+
+
+################################### testimonial ############################################
+
+def testimonial_list(request):
+    page = 'Testimonial'
+    testimonials = Testimonial.objects.all().order_by('-id')
+    return render(request, 'admin-list.html', {'testimonials': testimonials, 'page': page})
+
+
+def testimonial_create(request):
+    if request.method == "POST":
+        form = TestimonialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('testimonial-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = TestimonialForm()
+
+    return render(request, 'testimonial-form.html', {'form': form})
+
+
+def testimonial_update(request, pk):
+    testimonial = get_object_or_404(Testimonial, pk=pk)
+    if request.method == "POST":
+        form = TestimonialForm(request.POST, instance=testimonial)
+        if form.is_valid():
+            form.save()
+            return redirect('testimonial-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = TestimonialForm(instance=testimonial)
+
+    return render(request, 'testimonial-form.html', {'form': form, 'testimonial': testimonial})
+
+
+def testimonial_delete(request, pk):
+    testimonial = get_object_or_404(Testimonial, pk=pk)
+    testimonial.delete()
+    return redirect('testimonial-list')
+
+
+
+
+################################## Gallery ###################################
+
+
+def gallery_list(request):
+    page = 'Gallery'
+    gallery_items = GalleryImage.objects.all().order_by('-id')
+    return render(request, 'admin-list.html', {'gallery_items': gallery_items, 'page': page})
+
+
+def gallery_create(request):
+    if request.method == "POST":
+        form = GalleryImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('gallery-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = GalleryImageForm()
+
+    return render(request, 'gallery-form.html', {'form': form})
+
+
+def gallery_update(request, pk):
+    gallery_item = get_object_or_404(GalleryImage, pk=pk)
+    if request.method == "POST":
+        form = GalleryImageForm(request.POST, request.FILES, instance=gallery_item)
+        if form.is_valid():
+            form.save()
+            return redirect('gallery-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = GalleryImageForm(instance=gallery_item)
+
+    return render(request, 'gallery-form.html', {'form': form, 'gallery_item': gallery_item})
+
+
+def gallery_delete(request, pk):
+    gallery_item = get_object_or_404(GalleryImage, pk=pk)
+    gallery_item.delete()
+    return redirect('gallery-list')

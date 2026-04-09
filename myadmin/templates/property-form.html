@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<div class="card">
+  <div class="card-header">
+    <h4>{% if property %}Update{% else %}Add{% endif %} Property</h4>
+  </div>
+  <div class="card-body">
+    <div class="card-wrapper border rounded-3">
+      <form method="post" enctype="multipart/form-data" class="row g-3">
+        {% csrf_token %}
+
+        <!-- Basic Info -->
+        <div class="col-12">
+          <h5 class="mb-0 mt-2">Basic Information</h5>
+          <hr>
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.heading.id_for_label }}" class="form-label required-label">Heading</label>
+          {{ form.heading }}
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.property_id.id_for_label }}" class="form-label required-label">Property ID</label>
+          {{ form.property_id }}
+        </div>
+
+        <div class="col-md-12">
+          <label for="{{ form.subheading.id_for_label }}" class="form-label required-label">Subheading</label>
+          {{ form.subheading }}
+        </div>
+
+        <div class="col-md-12">
+          <label for="{{ form.paragraph.id_for_label }}" class="form-label">Description</label>
+          {{ form.paragraph }}
+        </div>
+
+        <!-- Location -->
+        <div class="col-12">
+          <h5 class="mb-0 mt-2">Location</h5>
+          <hr>
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.state.id_for_label }}" class="form-label required-label">State</label>
+          {{ form.state }}
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.district.id_for_label }}" class="form-label required-label">District</label>
+          {{ form.district }}
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.locality.id_for_label }}" class="form-label required-label">Locality</label>
+          {{ form.locality }}
+        </div>
+
+        <!-- Details -->
+        <div class="col-12">
+          <h5 class="mb-0 mt-2">Property Details</h5>
+          <hr>
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.price.id_for_label }}" class="form-label required-label">Price</label>
+          {{ form.price }}
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.status.id_for_label }}" class="form-label required-label">Status</label>
+          {{ form.status }}
+        </div>
+
+        <div class="col-md-4">
+          <label for="{{ form.type.id_for_label }}" class="form-label required-label">Type</label>
+          {{ form.type }}
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.youtube_url.id_for_label }}" class="form-label">YouTube URL</label>
+          {{ form.youtube_url }}
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.google_map_link.id_for_label }}" class="form-label">Google Map Link</label>
+          {{ form.google_map_link }}
+        </div>
+
+        <!-- Images -->
+        <div class="col-12">
+          <h5 class="mb-0 mt-2">Property Images</h5>
+          <hr>
+        </div>
+
+        <!-- Existing images shown only on update -->
+        {% if existing_images %}
+          <div class="col-12">
+            <label class="form-label">Existing Images</label>
+            <div class="d-flex flex-wrap gap-3">
+              {% for img in existing_images %}
+                <div class="text-center">
+                  <img src="{{ img.image.url }}" alt="Property Image"
+                       style="width: 120px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #dee2e6;">
+                  <div class="mt-1">
+                    <a href="{% url 'property-image-delete' img.id %}"
+                       onclick="return confirm('Delete this image?')"
+                       class="btn btn-danger btn-sm">
+                       <img src="{% static 'trash.svg' %}" alt="" width="12px" height="12px">
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Upload new images -->
+        <div class="col-12">
+          <label class="form-label">
+            {% if existing_images %}Add More Images{% else %}Upload Images{% endif %}
+          </label>
+
+          <!-- Preview area -->
+          <div id="image-preview-container" class="d-flex flex-wrap gap-3 mb-3"></div>
+
+          <!-- Drop zone -->
+          <div id="drop-zone"
+               style="border: 2px dashed #6c757d; border-radius: 8px; padding: 30px;
+                      text-align: center; cursor: pointer; background: #f8f9fa;">
+            <p class="mb-1 text-muted">Drag & drop images here or click to select</p>
+            <small class="text-muted">WEBP / JPEG only · Max 1MB each</small>
+            <input type="file" id="property_images" name="property_images"
+                   multiple accept="image/webp,image/jpeg"
+                   style="display: none;">
+          </div>
+        </div>
+
+        <div class="col-12 mt-3">
+          <button class="btn btn-primary" type="submit">Save</button>
+          <a class="btn btn-secondary" href="{% url 'property-list' %}">Go Back</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const dropZone   = document.getElementById('drop-zone');
+  const fileInput  = document.getElementById('property_images');
+  const previewBox = document.getElementById('image-preview-container');
+
+  // click drop zone → open file picker
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  // drag over styling
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.style.borderColor = '#0d6efd';
+    dropZone.style.background  = '#e9f0ff';
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.style.borderColor = '#6c757d';
+    dropZone.style.background  = '#f8f9fa';
+  });
+
+  // drop files
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.style.borderColor = '#6c757d';
+    dropZone.style.background  = '#f8f9fa';
+    handleFiles(e.dataTransfer.files);
+  });
+
+  // file input change
+  fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+  // keep a running DataTransfer so we can accumulate files across picks
+  let dataTransfer = new DataTransfer();
+
+  function handleFiles(files) {
+    const allowed = ['image/webp', 'image/jpeg'];
+    Array.from(files).forEach(file => {
+      if (!allowed.includes(file.type)) {
+        showToast(`${file.name}: Only WEBP and JPEG allowed.`);
+        return;
+      }
+      if (file.size > 1024 * 1024) {
+        showToast(`${file.name}: File must be under 1MB.`);
+        return;
+      }
+      dataTransfer.items.add(file);
+      addPreview(file);
+    });
+    // sync back to input so they submit with the form
+    fileInput.files = dataTransfer.files;
+  }
+
+  function addPreview(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'text-center position-relative';
+      wrapper.style.cssText = 'width:120px;';
+
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.style.cssText = 'width:120px;height:90px;object-fit:cover;border-radius:6px;border:1px solid #dee2e6;';
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn btn-danger btn-sm mt-1';
+      removeBtn.innerHTML = '&times; Remove';
+      removeBtn.style.cssText = 'width:100%;font-size:11px;';
+      removeBtn.addEventListener('click', () => {
+        // rebuild DataTransfer without this file
+        const newDT = new DataTransfer();
+        Array.from(dataTransfer.files)
+          .filter(f => f !== file)
+          .forEach(f => newDT.items.add(f));
+        dataTransfer = newDT;
+        fileInput.files = dataTransfer.files;
+        wrapper.remove();
+      });
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(removeBtn);
+      previewBox.appendChild(wrapper);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function showToast(text) {
+    Toastify({
+      text,
+      duration: 3000,
+      close: true,
+      gravity: 'top',
+      position: 'right',
+      backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
+    }).showToast();
+  }
+</script>
+
+{% endblock %}

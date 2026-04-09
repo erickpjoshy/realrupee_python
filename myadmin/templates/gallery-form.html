@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<div class="card">
+  <div class="card-header">
+    <h4>{% if gallery_item %}Update{% else %}Add{% endif %} Gallery Item</h4>
+  </div>
+  <div class="card-body">
+    <div class="card-wrapper border rounded-3">
+      <form method="post" enctype="multipart/form-data" class="row g-3">
+        {% csrf_token %}
+
+        <div class="col-md-6">
+          <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+          {{ form.title }}
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.type.id_for_label }}" class="form-label required-label">Type</label>
+          {{ form.type }}
+        </div>
+
+        <div class="col-md-12">
+          <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+          {{ form.description }}
+        </div>
+
+        <!-- Image field — shown/hidden by type -->
+        <div class="col-md-6" id="image-field">
+          <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
+          {{ form.image }}
+          <span class="badge badge-success mt-1">WEBP / JPEG · Max 1MB</span>
+
+          {% if gallery_item.image %}
+            <div class="mt-2">
+              <p class="text-muted mb-1" style="font-size:12px;">Current Image:</p>
+              <img src="{{ gallery_item.image.url }}" alt="Current"
+                   style="width:160px;height:110px;object-fit:cover;border-radius:6px;border:1px solid #dee2e6;">
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Image live preview -->
+        <div class="col-md-6 d-flex align-items-end" id="image-preview-col">
+          <div id="new-image-preview" style="display:none;">
+            <p class="text-muted mb-1" style="font-size:12px;">New Image Preview:</p>
+            <img id="preview-img" src=""
+                 style="width:160px;height:110px;object-fit:cover;border-radius:6px;border:1px solid #dee2e6;">
+          </div>
+        </div>
+
+        <!-- Video field — shown/hidden by type -->
+        <div class="col-md-6" id="video-field">
+          <label for="{{ form.video.id_for_label }}" class="form-label">Video</label>
+          {{ form.video }}
+          <span class="badge badge-success mt-1">MP4 / WEBM · Max 50MB</span>
+
+          {% if gallery_item.video %}
+            <div class="mt-2">
+              <p class="text-muted mb-1" style="font-size:12px;">Current Video:</p>
+              <video width="160" height="110" controls
+                     style="border-radius:6px;border:1px solid #dee2e6;object-fit:cover;">
+                <source src="{{ gallery_item.video.url }}">
+              </video>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="col-12">
+          <button class="btn btn-primary" type="submit">Save</button>
+          <a class="btn btn-secondary" href="{% url 'gallery-list' %}">Go Back</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const typeSelect   = document.getElementById('id_type');
+    const imageField   = document.getElementById('image-field');
+    const imagePreview = document.getElementById('image-preview-col');
+    const videoField   = document.getElementById('video-field');
+    const imageInput   = document.getElementById('id_image');
+    const videoInput   = document.getElementById('id_video');
+
+    // show/hide fields based on type
+    function toggleFields() {
+      if (typeSelect.value === 'image') {
+        imageField.style.display   = 'block';
+        imagePreview.style.display = 'flex';
+        videoField.style.display   = 'none';
+      } else {
+        imageField.style.display   = 'none';
+        imagePreview.style.display = 'none';
+        videoField.style.display   = 'block';
+      }
+    }
+
+    toggleFields(); // run on page load
+    typeSelect.addEventListener('change', toggleFields);
+
+    // image validation + preview
+    if (imageInput) {
+      imageInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const allowed = ['image/webp', 'image/jpeg'];
+        if (!allowed.includes(file.type)) {
+          this.value = '';
+          document.getElementById('new-image-preview').style.display = 'none';
+          showToast('Only WEBP and JPEG images are allowed.');
+          return;
+        }
+        if (file.size > 1024 * 1024) {
+          this.value = '';
+          document.getElementById('new-image-preview').style.display = 'none';
+          showToast('Image must be under 1MB.');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = e => {
+          document.getElementById('preview-img').src = e.target.result;
+          document.getElementById('new-image-preview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // video validation
+    if (videoInput) {
+      videoInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const allowed = ['video/mp4', 'video/webm'];
+        if (!allowed.includes(file.type)) {
+          this.value = '';
+          showToast('Only MP4 and WEBM videos are allowed.');
+          return;
+        }
+        if (file.size > 50 * 1024 * 1024) {
+          this.value = '';
+          showToast('Video must be under 50MB.');
+          return;
+        }
+      });
+    }
+
+    function showToast(text) {
+      Toastify({
+        text,
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
+      }).showToast();
+    }
+  });
+</script>
+
+{% endblock %}

@@ -281,6 +281,407 @@ font-family: Verdana, sans-serif;
   {% endif %}
 
 
+  {% if page == 'Locality' %}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <a class="btn btn-primary" style="display: inline-block;" href="{% url 'locality-create' %}">Add</a>
+            <h4 style="text-align: center;">Locality</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive theme-scrollbar">
+              <table class="display" id="basic-1">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>State</th>
+                    <th>District</th>
+                    <th>Locality</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for locality in localities %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ locality.state.name }}</td>
+                      <td>{{ locality.district.name }}</td>
+                      <td>{{ locality.name }}</td>
+
+                      <td>
+                        <a class="btn btn-primary-gradien" href="{% url 'locality-update' locality.id %}">
+                          <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                        </a>
+                      </td>
+
+                      <td>
+                        <a onclick="showConfirmation('{% url 'locality-delete' locality.id %}')" <button type="button"
+                            class="btn btn-danger-gradien btn-sm btn-icon-text">
+                            <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                          </button>
+                        </a>
+                      </td>
+
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% endif %}
+
+
+  {% if page == 'Property' %}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <a class="btn btn-primary" style="display: inline-block;" href="{% url 'property-create' %}">Add</a>
+            <h4 style="text-align: center;">Property</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive theme-scrollbar">
+              <table class="display" id="basic-1">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Heading</th>
+                    <th>Property ID</th>
+                    <th>State</th>
+                    <th>District</th>
+                    <th>Locality</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Images</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for property in properties %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ property.heading }}</td>
+                      <td>{{ property.property_id }}</td>
+                      <td>{{ property.state.name }}</td>
+                      <td>{{ property.district.name }}</td>
+                      <td>{{ property.locality.name }}</td>
+                      <td>{{ property.price }}</td>
+                      <td>
+                        {% if property.status == 'For Sale' %}
+                          <span class="badge badge-light-success">For Sale</span>
+                        {% else %}
+                          <span class="badge badge-light-danger">Sold</span>
+                        {% endif %}
+                      </td>
+                      <td>{{ property.type }}</td>
+                      <td><span class="badge badge-light-primary">{{ property.images.count }}</span></td>
+
+                      <td>
+                        <a class="btn btn-primary-gradien" href="{% url 'property-update' property.id %}">
+                          <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                        </a>
+                      </td>
+
+                      <td>
+                        <a onclick="showConfirmation('{% url 'property-delete' property.id %}')" <button type="button"
+                            class="btn btn-danger-gradien btn-sm btn-icon-text">
+                            <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                          </button>
+                        </a>
+                      </td>
+
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endif %}
+
+
+
+{% if page == 'Dist Property' %}
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <a class="btn btn-primary" style="display: inline-block;" href="{% url 'dist-property-create' %}">Add</a>
+          <h4 style="text-align: center;">Dist Property</h4>
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive theme-scrollbar">
+            <table class="display" id="basic-1">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Image</th>
+                  <th>Heading</th>
+                  <th>Property ID</th>
+                  <th>Button Text</th>
+                  <th>Button URL</th>
+                  <th>Update</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for dp in dist_properties %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                      {% if dp.image %}
+                        <img src="{{ dp.image.url }}" alt="{{ dp.heading }}" class="img-fluid table-avtar">
+                      {% else %}
+                        <span class="badge badge-light-danger">No Image</span>
+                      {% endif %}
+                    </td>
+                    <td>{{ dp.heading }}</td>
+                    <td>{{ dp.property_id }}</td>
+                    <td>{{ dp.button_text }}</td>
+                    <td>
+                      <a href="{{ dp.button_url }}" target="_blank" class="btn btn-sm btn-outline-info">Visit</a>
+                    </td>
+
+                    <td>
+                      <a class="btn btn-primary-gradien" href="{% url 'dist-property-update' dp.id %}">
+                        <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                      </a>
+                    </td>
+
+                    <td>
+                      <a onclick="showConfirmation('{% url 'dist-property-delete' dp.id %}')" <button type="button"
+                          class="btn btn-danger-gradien btn-sm btn-icon-text">
+                          <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                        </button>
+                      </a>
+                    </td>
+
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+
+
+{% if page == 'Blog Content' %}
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <a class="btn btn-primary" style="display: inline-block;" href="{% url 'blog-content-create' %}">Add</a>
+          <h4 style="text-align: center;">Blog Content</h4>
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive theme-scrollbar">
+            <table class="display" id="basic-1">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Image</th>
+                  <th>Heading</th>
+                  <th>Paragraph</th>
+                  <th>Date</th>
+                  <th>Update</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for blog in blogs %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                      {% if blog.image %}
+                        <img src="{{ blog.image.url }}" alt="{{ blog.heading }}" class="img-fluid table-avtar">
+                      {% else %}
+                        <span class="badge badge-light-danger">No Image</span>
+                      {% endif %}
+                    </td>
+                    <td>{{ blog.heading }}</td>
+                    <td>{{ blog.paragraph|truncatechars:60 }}</td>
+                    <td>{{ blog.date }}</td>
+
+                    <td>
+                      <a class="btn btn-primary-gradien" href="{% url 'blog-content-update' blog.id %}">
+                        <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                      </a>
+                    </td>
+
+                    <td>
+                      <a onclick="showConfirmation('{% url 'blog-content-delete' blog.id %}')" <button type="button"
+                          class="btn btn-danger-gradien btn-sm btn-icon-text">
+                          <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                        </button>
+                      </a>
+                    </td>
+
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+
+
+  {% if page == 'Testimonial' %}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <a class="btn btn-primary" style="display: inline-block;" href="{% url 'testimonial-create' %}">Add</a>
+            <h4 style="text-align: center;">Testimonial</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive theme-scrollbar">
+              <table class="display" id="basic-1">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Review</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for testimonial in testimonials %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ testimonial.name }}</td>
+                      <td>{{ testimonial.review|truncatechars:80 }}</td>
+
+                      <td>
+                        <a class="btn btn-primary-gradien" href="{% url 'testimonial-update' testimonial.id %}">
+                          <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                        </a>
+                      </td>
+
+                      <td>
+                        <a onclick="showConfirmation('{% url 'testimonial-delete' testimonial.id %}')" <button type="button"
+                            class="btn btn-danger-gradien btn-sm btn-icon-text">
+                            <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                          </button>
+                        </a>
+                      </td>
+
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% endif %}
+
+  {% if page == 'Gallery' %}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <a class="btn btn-primary" style="display: inline-block;" href="{% url 'gallery-create' %}">Add</a>
+            <h4 style="text-align: center;">Gallery</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive theme-scrollbar">
+              <table class="display" id="basic-1">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Type</th>
+                    <th>Preview</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in gallery_items %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>
+                        {% if item.type == 'image' %}
+                          <span class="badge badge-light-primary">Image</span>
+                        {% else %}
+                          <span class="badge badge-light-warning">Video</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if item.type == 'image' and item.image %}
+                          <img src="{{ item.image.url }}" alt="{{ item.title }}" class="img-fluid table-avtar">
+                        {% elif item.type == 'video' and item.video %}
+                          <video width="80" height="55" style="border-radius:4px;object-fit:cover;">
+                            <source src="{{ item.video.url }}">
+                          </video>
+                        {% else %}
+                          <span class="badge badge-light-danger">No File</span>
+                        {% endif %}
+                      </td>
+                      <td>{{ item.title|default:"-" }}</td>
+                      <td>{{ item.description|truncatechars:60|default:"-" }}</td>
+
+                      <td>
+                        <a class="btn btn-primary-gradien" href="{% url 'gallery-update' item.id %}">
+                          <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                        </a>
+                      </td>
+
+                      <td>
+                        <a onclick="showConfirmation('{% url 'gallery-delete' item.id %}')" <button type="button"
+                            class="btn btn-danger-gradien btn-sm btn-icon-text">
+                            <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                          </button>
+                        </a>
+                      </td>
+
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+
     
 
     
