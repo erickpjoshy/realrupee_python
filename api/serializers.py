@@ -61,7 +61,7 @@ class GalleryImageSerializer(serializers.ModelSerializer):
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Testimonial
-        fields = ['id', 'name', 'review']
+        fields = '__all__'
 
 
 

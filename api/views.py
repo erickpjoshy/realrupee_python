@@ -69,9 +69,11 @@ class HomeAPIView(APIView):
 class TestimonialAPIView(APIView):
     def get(self, request):
         testimonials = Testimonial.objects.all()
-        serializer = TestimonialSerializer(testimonials, many=True, context={'request': request})
-        return Response(serializer.data)
-    
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        result_page = paginator.paginate_queryset(testimonials, request)
+        serializer = TestimonialSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
 
 class PropertyListPagination(PageNumberPagination):
@@ -385,11 +387,18 @@ class CreateLocalityAPIView(APIView):
 
 class CreateTestimonialAPIView(APIView):
     def post(self, request):
-        name = request.data.get('name')
+        name   = request.data.get('name')
         review = request.data.get('review')
-        testimonial = Testimonial.objects.create(name=name, review=review)
-        return Response({"success": True, "id": testimonial.id}, status=status.HTTP_201_CREATED)
+        rating = request.data.get('rating', '5')
 
+        testimonial = Testimonial.objects.create(
+            name=name,
+            review=review,
+            rating=rating,
+        )
+        return Response({"success": True, "id": testimonial.id}, status=status.HTTP_201_CREATED)
+    
+    
 class DeleteTestimonialAPIView(APIView):
     def delete(self, request, testimonial_id):
         testimonial = get_object_or_404(Testimonial, id=testimonial_id)

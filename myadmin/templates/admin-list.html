@@ -171,6 +171,56 @@ font-family: Verdana, sans-serif;
   {% endif %}
 
 
+  {% if page == 'Amenities' %}
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <a class="btn btn-primary" style="display: inline-block;" href="{% url 'amenity-create' %}">Add</a>
+            <h4 style="text-align: center;">Amenities</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive theme-scrollbar">
+              <table class="display" id="basic-1">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Created</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for amenity in amenities %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ amenity.name }}</td>
+                    <td>{{ amenity.created|date:"d M Y, h:i A" }}</td>
+                    <td>
+                      <a class="btn btn-primary-gradien" href="{% url 'amenity-update' amenity.id %}">
+                        <img src="{% static 'edit-pencil.svg' %}" alt="" width="15px" height="15px">
+                      </a>
+                    </td>
+                    <td>
+                      <a onclick="showConfirmation('{% url 'amenity-delete' amenity.id %}')">
+                        <button type="button" class="btn btn-danger-gradien btn-sm btn-icon-text">
+                          <img src="{% static 'trash.svg' %}" alt="" width="15px" height="15px">
+                        </button>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+
   {% if page == 'State Name' %}
 
     <div class="row">

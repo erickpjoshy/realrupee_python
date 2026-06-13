@@ -61,6 +61,11 @@ urlpatterns = [
     path('gallery/update/<int:pk>/', gallery_update, name='gallery-update'),
     path('gallery/delete/<int:pk>/', gallery_delete, name='gallery-delete'),
 
+    path('amenities/',               amenity_list,   name='amenity-list'),
+    path('amenities/create/',        amenity_create, name='amenity-create'),
+    path('amenities/update/<int:pk>/',amenity_update, name='amenity-update'),
+    path('amenities/delete/<int:pk>/',amenity_delete, name='amenity-delete'),
+
 
         
 

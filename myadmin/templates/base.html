@@ -507,7 +507,7 @@ display: none !important;
         <div>
           <div class="logo-wrapper"><a href="{% url 'superadmin-dashboard' %}">
             <span style="font-size: 24px;">
-              <img src="{% static 'logo.png' %}" alt="" style="width: 165px;">
+              <img src="{% static 'logo.png' %}" alt="" >
             </span>
           </a>
             <div class="back-btn"><i class="fa fa-angle-left"></i></div>
@@ -538,12 +538,12 @@ display: none !important;
                   </div>
                 </li>
                   
-                <li class="sidebar-main-title">
+                <!-- <li class="sidebar-main-title">
                   <div>
-                    <h6 class="lan-1">Ecommerce</h6>
+                    <h6 class="lan-1"></h6>
                   </div>
-                </li>
-                  <li class="sidebar-list">
+                </li> -->
+                  <li class="sidebar-list" style="margin-top: 4rem;">
                     <a
                       class="sidebar-link sidebar-title link-nav"
                       href="{% url 'superadmin-dashboard' %}"
@@ -620,6 +620,16 @@ display: none !important;
                     >
                     <img width="16" height="16" src="{% static 'blog.svg' %}" alt="graph" class="icons-new"/>
                       <span>Blog Content</span>
+                    </a>
+                  </li>
+
+                  <li class="sidebar-list">
+                    <a
+                      class="sidebar-link sidebar-title link-nav"
+                      href="{% url 'amenity-list' %}"
+                    >
+                    <img width="16" height="16" src="{% static 'blog.svg' %}" alt="graph" class="icons-new"/>
+                      <span>Amenties</span>
                     </a>
                   </li>
 

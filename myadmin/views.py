@@ -97,11 +97,23 @@ def logout(request):
 
 def index(request):
     context = {
-
+        'total_properties':      Add_Property.objects.count(),
+        'for_sale_properties':   Add_Property.objects.filter(status='For Sale').count(),
+        'sold_properties':       Add_Property.objects.filter(status='Sold').count(),
+        'total_dist_properties': Add_Dist_Property.objects.count(),
+        'total_states':          State_name.objects.count(),
+        'total_districts':       District_name.objects.count(),
+        'total_localities':      Locality.objects.count(),
+        'total_amenities':       Amenity.objects.count(),
+        'total_blogs':           Blog_Content.objects.count(),
+        'total_testimonials':    Testimonial.objects.count(),
+        'total_gallery':         GalleryImage.objects.count(),
+        'total_contacts':        Contact_Uspage.objects.count(),
+        'recent_contacts':       Contact_Uspage.objects.order_by('-id')[:5],
+        'recent_blogs':          Blog_Content.objects.order_by('-id')[:5],
+        'recent_testimonials':   Testimonial.objects.order_by('-id')[:5],
     }
-    return render(request, 'superadmin-dashboard.html',context)
-
-
+    return render(request, 'superadmin-dashboard.html', context)
 
 
 ################################### Contact Us #############################
@@ -542,3 +554,50 @@ def gallery_delete(request, pk):
     gallery_item = get_object_or_404(GalleryImage, pk=pk)
     gallery_item.delete()
     return redirect('gallery-list')
+
+
+
+
+
+
+
+
+
+
+def amenity_list(request):
+    page = 'Amenities'
+    amenities = Amenity.objects.all().order_by('-id')
+    return render(request, 'admin-list.html', {'amenities': amenities, 'page': page})
+
+
+def amenity_create(request):
+    if request.method == "POST":
+        form = AmenityForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('amenity-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = AmenityForm()
+    return render(request, 'amenity-form.html', {'form': form})
+
+
+def amenity_update(request, pk):
+    amenity = get_object_or_404(Amenity, pk=pk)
+    if request.method == "POST":
+        form = AmenityForm(request.POST, instance=amenity)
+        if form.is_valid():
+            form.save()
+            return redirect('amenity-list')
+        else:
+            print('form errors:', form.errors)
+    else:
+        form = AmenityForm(instance=amenity)
+    return render(request, 'amenity-form.html', {'form': form, 'amenity': amenity})
+
+
+def amenity_delete(request, pk):
+    amenity = get_object_or_404(Amenity, pk=pk)
+    amenity.delete()
+    return redirect('amenity-list')

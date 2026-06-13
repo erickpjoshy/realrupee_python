@@ -106,9 +106,13 @@ class BlogContentForm(forms.ModelForm):
 class TestimonialForm(forms.ModelForm):
     class Meta:
         model = Testimonial
-        fields = ['name', 'review']
+        fields = ['name', 'rating', 'review']
         widgets = {
             'name':   forms.TextInput(attrs={'class': 'form-control'}),
+            'rating': forms.Select(
+                choices=Testimonial.RATING_CHOICES,
+                attrs={'class': 'form-select'}
+            ),
             'review': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
         }
 
@@ -123,4 +127,14 @@ class GalleryImageForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'image':       forms.FileInput(attrs={'class': 'form-control'}),
             'video':       forms.FileInput(attrs={'class': 'form-control'}),
+        }
+
+
+
+class AmenityForm(forms.ModelForm):
+    class Meta:
+        model = Amenity
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
         }

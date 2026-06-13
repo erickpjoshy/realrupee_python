@@ -16,6 +16,18 @@
           {{ form.name }}
         </div>
 
+        <div class="col-md-6">
+          <label class="form-label required-label">Rating</label>
+          <div class="star-rating-wrapper">
+            <div class="star-display" id="starDisplay">
+              {% for i in "12345" %}
+                <span class="star" data-value="{{ i }}">&#9733;</span>
+              {% endfor %}
+            </div>
+            {{ form.rating }}
+          </div>
+        </div>
+
         <div class="col-md-12">
           <label for="{{ form.review.id_for_label }}" class="form-label required-label">Review</label>
           {{ form.review }}
@@ -30,5 +42,73 @@
     </div>
   </div>
 </div>
+
+<style>
+  .star-rating-wrapper { display: flex; align-items: center; gap: 12px; }
+
+  #starDisplay { display: flex; gap: 4px; }
+
+  .star {
+    font-size: 28px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.15s, transform 0.1s;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .star.full  { color: #f5a623; }
+  .star.half  { color: #f5a623; }   /* half handled via text */
+  .star:hover { transform: scale(1.15); }
+
+  /* hide the <select> but keep it functional */
+  #id_rating { width: auto; }
+</style>
+
+<script>
+  const selectEl   = document.getElementById('id_rating');
+  const stars      = document.querySelectorAll('.star');
+  const halfStar   = '½';
+
+  function renderStars(val) {
+    const v = parseFloat(val);
+    stars.forEach((s, i) => {
+      const starNum = i + 1;
+      s.classList.remove('full', 'half');
+      s.textContent = '★';
+      if (v >= starNum) {
+        s.classList.add('full');
+      } else if (v === starNum - 0.5) {
+        s.classList.add('half');
+        s.textContent = '½';
+      }
+    });
+  }
+
+  // init on load (for update page)
+  renderStars(selectEl.value || '5');
+
+  stars.forEach((star, idx) => {
+    // left-half = 0.5, right-half = full
+    star.addEventListener('mousemove', (e) => {
+      const rect   = star.getBoundingClientRect();
+      const isLeft = e.clientX - rect.left < rect.width / 2;
+      const hval   = isLeft ? idx + 0.5 : idx + 1;
+      renderStars(hval);
+    });
+
+    star.addEventListener('mouseleave', () => {
+      renderStars(selectEl.value || '5');
+    });
+
+    star.addEventListener('click', (e) => {
+      const rect   = star.getBoundingClientRect();
+      const isLeft = e.clientX - rect.left < rect.width / 2;
+      const chosen = isLeft ? (idx + 0.5).toString() : (idx + 1).toString();
+      selectEl.value = chosen;
+      renderStars(chosen);
+    });
+  });
+</script>
 
 {% endblock %}

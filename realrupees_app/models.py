@@ -15,6 +15,14 @@ class State_name(models.Model):
         return self.name
 
 
+class Amenity(models.Model):
+    name = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class District_name(models.Model):
     state = models.ForeignKey(State_name, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -86,15 +94,24 @@ class Blog_Content(models.Model):
 
 
 class Testimonial(models.Model):
-    name = models.CharField(max_length=255)
-    
-    
+    RATING_CHOICES = [
+        ('1',   '1 Star'),
+        ('1.5', '1.5 Stars'),
+        ('2',   '2 Stars'),
+        ('2.5', '2.5 Stars'),
+        ('3',   '3 Stars'),
+        ('3.5', '3.5 Stars'),
+        ('4',   '4 Stars'),
+        ('4.5', '4.5 Stars'),
+        ('5',   '5 Stars'),
+    ]
+
+    name   = models.CharField(max_length=255)
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=5)
     review = models.TextField()
 
     def __str__(self):
         return self.name
-
-
 # Create your models here.
 
 
