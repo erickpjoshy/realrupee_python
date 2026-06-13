@@ -92,13 +92,47 @@
           {{ form.google_map_link }}
         </div>
 
+        <!-- Amenities -->
+        <div class="col-12">
+          <h5 class="mb-0 mt-2">Amenities</h5>
+          <hr>
+        </div>
+
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="form-label mb-0">Select Amenities</label>
+            <button type="button" class="btn btn-sm btn-outline-primary"
+                    data-bs-toggle="modal" data-bs-target="#addAmenityModal">
+              + New Amenity
+            </button>
+          </div>
+
+          <div class="border rounded-3 p-3" id="amenity-grid"
+               style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap:10px;">
+            {% for amenity in all_amenities %}
+              <label class="amenity-card d-flex align-items-center gap-2 p-2 border rounded-2"
+                     style="cursor:pointer; transition: background 0.15s;">
+                <input type="checkbox" name="amenities" value="{{ amenity.id }}"
+                       class="amenity-cb"
+                       {% if property and amenity in form.instance.amenities.all %}checked{% endif %}>
+                {% if amenity.icon %}
+                  <img src="{{ amenity.icon.url }}" width="22" height="22"
+                       style="object-fit:contain; flex-shrink:0;">
+                {% endif %}
+                <span style="font-size:13px;">{{ amenity.name }}</span>
+              </label>
+            {% empty %}
+              <p class="text-muted small mb-0" id="no-amenity-msg">No amenities yet. Create one using the button above.</p>
+            {% endfor %}
+          </div>
+        </div>
+
         <!-- Images -->
         <div class="col-12">
           <h5 class="mb-0 mt-2">Property Images</h5>
           <hr>
         </div>
 
-        <!-- Existing images shown only on update -->
         {% if existing_images %}
           <div class="col-12">
             <label class="form-label">Existing Images</label>
@@ -106,12 +140,12 @@
               {% for img in existing_images %}
                 <div class="text-center">
                   <img src="{{ img.image.url }}" alt="Property Image"
-                       style="width: 120px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #dee2e6;">
+                       style="width:120px; height:90px; object-fit:cover; border-radius:6px; border:1px solid #dee2e6;">
                   <div class="mt-1">
                     <a href="{% url 'property-image-delete' img.id %}"
                        onclick="return confirm('Delete this image?')"
                        class="btn btn-danger btn-sm">
-                       <img src="{% static 'trash.svg' %}" alt="" width="12px" height="12px">
+                      <img src="{% static 'trash.svg' %}" alt="" width="12px" height="12px">
                     </a>
                   </div>
                 </div>
@@ -120,24 +154,20 @@
           </div>
         {% endif %}
 
-        <!-- Upload new images -->
         <div class="col-12">
           <label class="form-label">
             {% if existing_images %}Add More Images{% else %}Upload Images{% endif %}
           </label>
 
-          <!-- Preview area -->
           <div id="image-preview-container" class="d-flex flex-wrap gap-3 mb-3"></div>
 
-          <!-- Drop zone -->
           <div id="drop-zone"
-               style="border: 2px dashed #6c757d; border-radius: 8px; padding: 30px;
-                      text-align: center; cursor: pointer; background: #f8f9fa;">
+               style="border:2px dashed #6c757d; border-radius:8px; padding:30px;
+                      text-align:center; cursor:pointer; background:#f8f9fa;">
             <p class="mb-1 text-muted">Drag & drop images here or click to select</p>
             <small class="text-muted">WEBP / JPEG only · Max 1MB each</small>
             <input type="file" id="property_images" name="property_images"
-                   multiple accept="image/webp,image/jpeg"
-                   style="display: none;">
+                   multiple accept="image/webp,image/jpeg" style="display:none;">
           </div>
         </div>
 
@@ -151,15 +181,119 @@
   </div>
 </div>
 
+<!-- ── Add Amenity Modal ── -->
+<div class="modal fade" id="addAmenityModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title">Add New Amenity</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Name <span class="text-danger">*</span></label>
+          <input type="text" id="newAmenityName" class="form-control" placeholder="e.g. Swimming Pool">
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Icon <small class="text-muted">(optional)</small></label>
+          <input type="file" id="newAmenityIcon" class="form-control form-control-sm" accept="image/*">
+        </div>
+        <div id="amenityModalError" class="text-danger small d-none"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" id="saveAmenityBtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .amenity-card:has(.amenity-cb:checked) {
+    background: #e8f8e8;
+    border-color: #3AAA35 !important;
+  }
+</style>
+
 <script>
+  /* ── Amenity checkbox highlight ── */
+  document.querySelectorAll('.amenity-cb').forEach(cb => {
+    // init checked state on load
+    if (cb.checked) cb.closest('.amenity-card').style.cssText = 'cursor:pointer;background:#e8f8e8;border-color:#3AAA35;';
+    cb.addEventListener('change', () => {
+      cb.closest('.amenity-card').style.cssText = cb.checked
+        ? 'cursor:pointer;background:#e8f8e8;border-color:#3AAA35;'
+        : 'cursor:pointer;';
+    });
+  });
+
+  /* ── AJAX create amenity ── */
+  document.getElementById('saveAmenityBtn').addEventListener('click', () => {
+    const name     = document.getElementById('newAmenityName').value.trim();
+    const iconFile = document.getElementById('newAmenityIcon').files[0];
+    const errEl    = document.getElementById('amenityModalError');
+
+    if (!name) {
+      errEl.textContent = 'Name is required.';
+      errEl.classList.remove('d-none');
+      return;
+    }
+    errEl.classList.add('d-none');
+
+    const fd = new FormData();
+    fd.append('name', name);
+    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    if (iconFile) fd.append('icon', iconFile);
+
+    fetch("{% url 'amenity-create-ajax' %}", { method: 'POST', body: fd })
+      .then(r => r.json())
+      .then(data => {
+        if (!data.success) {
+          errEl.textContent = JSON.stringify(data.errors);
+          errEl.classList.remove('d-none');
+          return;
+        }
+
+        // remove "no amenities" placeholder if present
+        const noMsg = document.getElementById('no-amenity-msg');
+        if (noMsg) noMsg.remove();
+
+        // inject new card into grid, pre-checked
+        const grid  = document.getElementById('amenity-grid');
+        const label = document.createElement('label');
+        label.className = 'amenity-card d-flex align-items-center gap-2 p-2 border rounded-2';
+        label.style.cssText = 'cursor:pointer;background:#e8f8e8;border-color:#3AAA35;';
+        label.innerHTML = `
+          <input type="checkbox" name="amenities" value="${data.id}" class="amenity-cb" checked>
+          ${data.icon_url ? `<img src="${data.icon_url}" width="22" height="22" style="object-fit:contain;flex-shrink:0;">` : ''}
+          <span style="font-size:13px;">${data.name}</span>
+        `;
+        label.querySelector('.amenity-cb').addEventListener('change', e => {
+          label.style.cssText = e.target.checked
+            ? 'cursor:pointer;background:#e8f8e8;border-color:#3AAA35;'
+            : 'cursor:pointer;';
+        });
+        grid.appendChild(label);
+
+        // reset modal fields
+        document.getElementById('newAmenityName').value = '';
+        document.getElementById('newAmenityIcon').value = '';
+        bootstrap.Modal.getInstance(document.getElementById('addAmenityModal')).hide();
+        showToast('Amenity created and selected!');
+      })
+      .catch(() => {
+        errEl.textContent = 'Something went wrong.';
+        errEl.classList.remove('d-none');
+      });
+  });
+
+  /* ── Image drop zone ── */
   const dropZone   = document.getElementById('drop-zone');
   const fileInput  = document.getElementById('property_images');
   const previewBox = document.getElementById('image-preview-container');
 
-  // click drop zone → open file picker
   dropZone.addEventListener('click', () => fileInput.click());
 
-  // drag over styling
   dropZone.addEventListener('dragover', e => {
     e.preventDefault();
     dropZone.style.borderColor = '#0d6efd';
@@ -171,7 +305,6 @@
     dropZone.style.background  = '#f8f9fa';
   });
 
-  // drop files
   dropZone.addEventListener('drop', e => {
     e.preventDefault();
     dropZone.style.borderColor = '#6c757d';
@@ -179,27 +312,22 @@
     handleFiles(e.dataTransfer.files);
   });
 
-  // file input change
   fileInput.addEventListener('change', () => handleFiles(fileInput.files));
 
-  // keep a running DataTransfer so we can accumulate files across picks
   let dataTransfer = new DataTransfer();
 
   function handleFiles(files) {
     const allowed = ['image/webp', 'image/jpeg'];
     Array.from(files).forEach(file => {
       if (!allowed.includes(file.type)) {
-        showToast(`${file.name}: Only WEBP and JPEG allowed.`);
-        return;
+        showToast(`${file.name}: Only WEBP and JPEG allowed.`); return;
       }
       if (file.size > 1024 * 1024) {
-        showToast(`${file.name}: File must be under 1MB.`);
-        return;
+        showToast(`${file.name}: File must be under 1MB.`); return;
       }
       dataTransfer.items.add(file);
       addPreview(file);
     });
-    // sync back to input so they submit with the form
     fileInput.files = dataTransfer.files;
   }
 
@@ -220,11 +348,8 @@
       removeBtn.innerHTML = '&times; Remove';
       removeBtn.style.cssText = 'width:100%;font-size:11px;';
       removeBtn.addEventListener('click', () => {
-        // rebuild DataTransfer without this file
         const newDT = new DataTransfer();
-        Array.from(dataTransfer.files)
-          .filter(f => f !== file)
-          .forEach(f => newDT.items.add(f));
+        Array.from(dataTransfer.files).filter(f => f !== file).forEach(f => newDT.items.add(f));
         dataTransfer = newDT;
         fileInput.files = dataTransfer.files;
         wrapper.remove();

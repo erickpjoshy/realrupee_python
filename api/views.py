@@ -398,7 +398,7 @@ class CreateTestimonialAPIView(APIView):
         )
         return Response({"success": True, "id": testimonial.id}, status=status.HTTP_201_CREATED)
     
-    
+
 class DeleteTestimonialAPIView(APIView):
     def delete(self, request, testimonial_id):
         testimonial = get_object_or_404(Testimonial, id=testimonial_id)
@@ -432,35 +432,32 @@ class PropertyPagination(PageNumberPagination):
 class PropertySearchAPIView(APIView):
     def get(self, request):
         property_type = request.query_params.get('property_type')
-        state_id = request.query_params.get('state_id')
-        district_id = request.query_params.get('district_id')
-        locality_id = request.query_params.get('locality_id')
-        price = request.query_params.get('price')
-        status = request.query_params.get('status')
-        heading = request.query_params.get('heading')
-        property_id = request.query_params.get('property_id')
+        state_id      = request.query_params.get('state_id')
+        district_id   = request.query_params.get('district_id')
+        locality_id   = request.query_params.get('locality_id')
+        price         = request.query_params.get('price')
+        status        = request.query_params.get('status')
+        query         = request.query_params.get('query')  # searches both id & name
 
         properties = Add_Property.objects.all()
 
-        # Filters
         if property_type:
             properties = properties.filter(type=property_type)
         if state_id:
-            properties = properties.filter(locality__state_id=state_id)
+            properties = properties.filter(state_id=state_id)
         if district_id:
-            properties = properties.filter(locality__district_id=district_id)
+            properties = properties.filter(district_id=district_id)
         if locality_id:
             properties = properties.filter(locality_id=locality_id)
         if price:
             properties = properties.filter(price=price)
         if status:
             properties = properties.filter(status=status)
-        if heading:
-            properties = properties.filter(heading__icontains=heading)
-        if property_id:
-            properties = properties.filter(property_id__icontains=property_id)
+        if query:
+            properties = properties.filter(
+                Q(property_id__icontains=query) | Q(heading__icontains=query)
+            )
 
-        # ✅ Apply Pagination
         paginator = PropertyPagination()
         paginated_qs = paginator.paginate_queryset(properties, request)
 
@@ -468,16 +465,16 @@ class PropertySearchAPIView(APIView):
         for p in paginated_qs:
             images = [img.image.url for img in p.images.all()]
             data.append({
-                "id": p.id,
-                "heading": p.heading,
+                "id":          p.id,
+                "heading":     p.heading,
                 "property_id": p.property_id,
-                "type": p.type,
-                "price": p.price,
-                "status": p.status,
-                "state_id": p.state_id,
+                "type":        p.type,
+                "price":       p.price,
+                "status":      p.status,
+                "state_id":    p.state_id,
                 "district_id": p.district_id,
                 "locality_id": p.locality_id,
-                "images": images,
+                "images":      images,
             })
 
         return paginator.get_paginated_response(data)

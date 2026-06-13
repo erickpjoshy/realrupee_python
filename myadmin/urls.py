@@ -38,6 +38,8 @@ urlpatterns = [
     path('property/update/<int:pk>/',       property_update,       name='property-update'),
     path('property/delete/<int:pk>/',       property_delete,       name='property-delete'),
     path('property/image-delete/<int:pk>/', property_image_delete, name='property-image-delete'),
+    path('amenities/create-ajax/', amenity_create_ajax, name='amenity-create-ajax'),
+
 
 
     path('dist-property/',                 dist_property_list,   name='dist-property-list'),

@@ -7,20 +7,35 @@ class PropertyImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image']
 
 
-class AddPropertySerializer(serializers.ModelSerializer):
-    images = PropertyImageSerializer(many=True)
+class AmenitySerializer(serializers.ModelSerializer):
+    icon = serializers.SerializerMethodField()
 
-    state = serializers.StringRelatedField()
+    class Meta:
+        model  = Amenity
+        fields = ['id', 'name', 'icon']
+
+    def get_icon(self, obj):
+        request = self.context.get('request')
+        if obj.icon and request:
+            return request.build_absolute_uri(obj.icon.url)
+        return None
+
+
+class AddPropertySerializer(serializers.ModelSerializer):
+    images    = PropertyImageSerializer(many=True)
+    amenities = AmenitySerializer(many=True)
+
+    state    = serializers.StringRelatedField()
     district = serializers.StringRelatedField()
     locality = serializers.StringRelatedField()
 
     class Meta:
-        model = Add_Property
+        model  = Add_Property
         fields = [
             'id', 'heading', 'subheading', 'property_id',
             'state', 'district', 'locality', 'paragraph',
             'youtube_url', 'google_map_link', 'price',
-            'status', 'type', 'images'
+            'status', 'type', 'images', 'amenities',
         ]
 
 

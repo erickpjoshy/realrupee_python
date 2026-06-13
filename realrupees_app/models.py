@@ -17,6 +17,7 @@ class State_name(models.Model):
 
 class Amenity(models.Model):
     name = models.CharField(max_length=255)
+    icon = models.ImageField(upload_to='amenity_icons/', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -46,24 +47,25 @@ class Add_Property(models.Model):
         ('For Sale', 'For Sale'),
         ('Sold', 'Sold'),
     )
-    
-    heading = models.CharField(max_length=100)
-    subheading = models.TextField()
-    property_id = models.CharField(max_length=255)
-    
-    state = models.ForeignKey(State_name, on_delete=models.CASCADE, default=1)  # Provide default value
-    district = models.ForeignKey(District_name, on_delete=models.CASCADE, default=1)  # Provide default value
-    locality = models.ForeignKey(Locality, on_delete=models.CASCADE, default=1)
-    paragraph = models.TextField(default='none')
-    youtube_url = models.URLField(max_length=200, null=True, blank=True)
-    google_map_link = models.URLField(max_length=200, null=True, blank=True)
-    images = models.ManyToManyField('PropertyImage', related_name='properties')
-    price = models.CharField(max_length=255, default='None')
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='For Sale')
-    type  = models.CharField(max_length=255,default='None')
-    
+
+    heading        = models.CharField(max_length=100)
+    subheading     = models.TextField()
+    property_id    = models.CharField(max_length=255)
+    state          = models.ForeignKey(State_name, on_delete=models.CASCADE, default=1)
+    district       = models.ForeignKey(District_name, on_delete=models.CASCADE, default=1)
+    locality       = models.ForeignKey(Locality, on_delete=models.CASCADE, default=1)
+    paragraph      = models.TextField(default='none')
+    youtube_url    = models.URLField(max_length=200, null=True, blank=True)
+    google_map_link= models.URLField(max_length=200, null=True, blank=True)
+    images         = models.ManyToManyField('PropertyImage', related_name='properties')
+    amenities      = models.ManyToManyField('Amenity', related_name='properties', blank=True)
+    price          = models.CharField(max_length=255, default='None')
+    status         = models.CharField(max_length=50, choices=STATUS_CHOICES, default='For Sale')
+    type           = models.CharField(max_length=255, default='None')
+
     def __str__(self):
         return self.heading
+
 
 class PropertyImage(models.Model):
     image = models.ImageField(upload_to='mamamia_images/')

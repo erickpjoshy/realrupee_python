@@ -310,12 +310,25 @@ def property_list(request):
     return render(request, 'admin-list.html', {'properties': properties, 'page': page})
 
 
+def amenity_create_ajax(request):
+    """Called via AJAX from the property form to create a new amenity on the fly."""
+    if request.method == "POST":
+        form = AmenityForm(request.POST, request.FILES)
+        if form.is_valid():
+            amenity = form.save()
+            icon_url = amenity.icon.url if amenity.icon else ''
+            return JsonResponse({'success': True, 'id': amenity.id, 'name': amenity.name, 'icon_url': icon_url})
+        return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    return JsonResponse({'success': False}, status=405)
+
+
 def property_create(request):
     if request.method == "POST":
         form = PropertyForm(request.POST)
         if form.is_valid():
-            property_obj = form.save()
-            # handle multiple images
+            property_obj = form.save(commit=False)
+            property_obj.save()
+            form.save_m2m()                               # saves amenities
             images = request.FILES.getlist('property_images')
             for img in images:
                 image_obj = PropertyImage.objects.create(image=img)
@@ -326,7 +339,7 @@ def property_create(request):
     else:
         form = PropertyForm()
 
-    return render(request, 'property-form.html', {'form': form})
+    return render(request, 'property-form.html', {'form': form, 'all_amenities': Amenity.objects.all()})
 
 
 def property_update(request, pk):
@@ -334,8 +347,7 @@ def property_update(request, pk):
     if request.method == "POST":
         form = PropertyForm(request.POST, instance=property_obj)
         if form.is_valid():
-            form.save()
-            # add any new images uploaded
+            form.save()                                   # saves amenities via save_m2m
             images = request.FILES.getlist('property_images')
             for img in images:
                 image_obj = PropertyImage.objects.create(image=img)
@@ -346,12 +358,13 @@ def property_update(request, pk):
     else:
         form = PropertyForm(instance=property_obj)
 
-    existing_images = property_obj.images.all()
     return render(request, 'property-form.html', {
-        'form': form,
-        'property': property_obj,
-        'existing_images': existing_images
+        'form':            form,
+        'property':        property_obj,
+        'existing_images': property_obj.images.all(),
+        'all_amenities':   Amenity.objects.all(),
     })
+
 
 
 def property_delete(request, pk):

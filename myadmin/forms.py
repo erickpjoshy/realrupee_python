@@ -46,23 +46,31 @@ class LocalityForm(forms.ModelForm):
 
 
 class PropertyForm(forms.ModelForm):
+    amenities = forms.ModelMultipleChoiceField(
+        queryset=Amenity.objects.all(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple(),
+    )
+
     class Meta:
-        model = Add_Property
-        fields = ['heading', 'subheading', 'property_id', 'state', 'district', 
-                  'locality', 'paragraph', 'youtube_url', 'google_map_link', 
-                  'price', 'status', 'type']
+        model  = Add_Property
+        fields = [
+            'heading', 'subheading', 'property_id', 'state', 'district',
+            'locality', 'paragraph', 'youtube_url', 'google_map_link',
+            'price', 'status', 'type', 'amenities',
+        ]
         widgets = {
             'heading':         forms.TextInput(attrs={'class': 'form-control'}),
-            'subheading':      forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'subheading':      forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
             'property_id':     forms.TextInput(attrs={'class': 'form-control'}),
-            'state':           forms.Select(attrs={'class': 'form-control'}),
-            'district':        forms.Select(attrs={'class': 'form-control'}),
-            'locality':        forms.Select(attrs={'class': 'form-control'}),
+            'state':           forms.Select(attrs={'class': 'form-select'}),
+            'district':        forms.Select(attrs={'class': 'form-select'}),
+            'locality':        forms.Select(attrs={'class': 'form-select'}),
             'paragraph':       forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'youtube_url':     forms.URLInput(attrs={'class': 'form-control'}),
             'google_map_link': forms.URLInput(attrs={'class': 'form-control'}),
             'price':           forms.TextInput(attrs={'class': 'form-control'}),
-            'status':          forms.Select(attrs={'class': 'form-control'}),
+            'status':          forms.Select(attrs={'class': 'form-select'}),
             'type':            forms.TextInput(attrs={'class': 'form-control'}),
         }
 
@@ -133,8 +141,8 @@ class GalleryImageForm(forms.ModelForm):
 
 class AmenityForm(forms.ModelForm):
     class Meta:
-        model = Amenity
-        fields = ['name']
+        model  = Amenity
+        fields = ['name', 'icon']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Swimming Pool'}),
         }
