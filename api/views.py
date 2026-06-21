@@ -440,7 +440,11 @@ class PropertySearchAPIView(APIView):
         status        = request.query_params.get('status')
         query         = request.query_params.get('query')  # searches both id & name
 
-        properties = Add_Property.objects.all().prefetch_related('images')
+        properties = (
+            Add_Property.objects.all()
+            .select_related('state', 'district', 'locality')
+            .prefetch_related('images')
+        )
 
         if property_type:
             properties = properties.filter(type=property_type)
@@ -466,16 +470,19 @@ class PropertySearchAPIView(APIView):
         for p in paginated_qs:
             images = [request.build_absolute_uri(img.image.url) for img in p.images.all()]
             data.append({
-                "id":          p.id,
-                "heading":     p.heading,
-                "property_id": p.property_id,
-                "type":        p.type,
-                "price":       p.price,
-                "status":      p.status,
-                "state_id":    p.state_id,
-                "district_id": p.district_id,
-                "locality_id": p.locality_id,
-                "images":      images,
+                "id":            p.id,
+                "heading":       p.heading,
+                "property_id":   p.property_id,
+                "type":          p.type,
+                "price":         p.price,
+                "status":        p.status,
+                "state_id":      p.state_id,
+                "state":         p.state.name,
+                "district_id":   p.district_id,
+                "district":      p.district.name,
+                "locality_id":   p.locality_id,
+                "locality":      p.locality.name,
+                "images":        images,
             })
 
         return paginator.get_paginated_response(data)
