@@ -10,6 +10,7 @@ from realrupees_app.models import *
 from .serializers import *
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 
 class AdminLoginAPIView(APIView):
@@ -439,7 +440,7 @@ class PropertySearchAPIView(APIView):
         status        = request.query_params.get('status')
         query         = request.query_params.get('query')  # searches both id & name
 
-        properties = Add_Property.objects.all()
+        properties = Add_Property.objects.all().prefetch_related('images')
 
         if property_type:
             properties = properties.filter(type=property_type)
@@ -463,7 +464,7 @@ class PropertySearchAPIView(APIView):
 
         data = []
         for p in paginated_qs:
-            images = [img.image.url for img in p.images.all()]
+            images = [request.build_absolute_uri(img.image.url) for img in p.images.all()]
             data.append({
                 "id":          p.id,
                 "heading":     p.heading,
