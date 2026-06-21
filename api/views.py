@@ -433,9 +433,9 @@ class PropertyPagination(PageNumberPagination):
 class PropertySearchAPIView(APIView):
     def get(self, request):
         property_type = request.query_params.get('property_type')
-        state_id      = request.query_params.get('state_id')
-        district_id   = request.query_params.get('district_id')
-        locality_id   = request.query_params.get('locality_id')
+        state_id      = request.query_params.get('state')
+        district_id   = request.query_params.get('district')
+        locality_id   = request.query_params.get('locality')
         price         = request.query_params.get('price')
         status        = request.query_params.get('status')
         query         = request.query_params.get('query')  # searches both id & name
