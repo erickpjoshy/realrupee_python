@@ -146,3 +146,16 @@ class AmenityForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Swimming Pool'}),
         }
+
+
+
+class HomepageStatsForm(forms.ModelForm):
+    class Meta:
+        model = HomepageStats
+        fields = ['happy_customers', 'properties_listed', 'property_sold', 'cities_covered']
+        widgets = {
+            'happy_customers':   forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'properties_listed': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'property_sold':     forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'cities_covered':    forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+        }

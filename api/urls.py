@@ -45,6 +45,8 @@ urlpatterns = [
 
 
     path('property-filter/', views.PropertySearchAPIView.as_view(), name='api-property-filter'),
+    path('homepage-stats/', views.HomepageStatsAPIView.as_view(), name='homepage-stats-api'),
+
 
 
 

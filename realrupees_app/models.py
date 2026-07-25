@@ -158,3 +158,25 @@ class GalleryImage(models.Model):
         return self.title or "Gallery Item"
 
 
+class HomepageStats(models.Model):
+    happy_customers = models.PositiveIntegerField(default=0)
+    properties_listed = models.PositiveIntegerField(default=0)
+    property_sold = models.PositiveIntegerField(default=0)
+    cities_covered = models.PositiveIntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Homepage Stats"
+        verbose_name_plural = "Homepage Stats"
+
+    def __str__(self):
+        return f"Homepage Stats (updated {self.updated_at:%d %b %Y})"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1  # force singleton
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_solo(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj

@@ -96,6 +96,10 @@ def logout(request):
 
 
 def index(request):
+    # Singleton row for the public homepage banner stats — created on
+    # first access if it doesn't exist yet.
+    homepage_stats = HomepageStats.get_solo()
+ 
     context = {
         'total_properties':      Add_Property.objects.count(),
         'for_sale_properties':   Add_Property.objects.filter(status='For Sale').count(),
@@ -112,9 +116,26 @@ def index(request):
         'recent_contacts':       Contact_Uspage.objects.order_by('-id')[:5],
         'recent_blogs':          Blog_Content.objects.order_by('-id')[:5],
         'recent_testimonials':   Testimonial.objects.order_by('-id')[:5],
+ 
+        'homepage_stats':        homepage_stats,
+        'homepage_stats_form':   HomepageStatsForm(instance=homepage_stats),
     }
     return render(request, 'superadmin-dashboard.html', context)
-
+ 
+def update_homepage_stats(request):
+    """Handles the modal form submission from the dashboard to update
+    the singleton HomepageStats row, then redirects back to the dashboard."""
+    homepage_stats = HomepageStats.get_solo()
+ 
+    if request.method == 'POST':
+        form = HomepageStatsForm(request.POST, instance=homepage_stats)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Homepage stats updated successfully.')
+        else:
+            messages.error(request, 'Please correct the errors below and try again.')
+ 
+    return redirect('superadmin-dashboard')
 
 ################################### Contact Us #############################
 

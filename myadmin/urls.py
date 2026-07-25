@@ -8,6 +8,7 @@ urlpatterns = [
     path('', login, name='panel-login'),
     path('logout/', logout, name='panel-logout'),
     path('superadmin-dashboard/', index, name='superadmin-dashboard'),
+    path('homepage-stats/update/', update_homepage_stats, name='update-homepage-stats'),
 
     path('contact-us/',                  contact_us_list,   name='contact-us-list'),
     path('contact-us/create/',           contact_us_create, name='contact-us-create'),

@@ -84,3 +84,17 @@ class ContactUspageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact_Uspage
         fields = '__all__'
+
+
+class HomepageStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomepageStats
+        fields = [
+            'id',
+            'happy_customers',
+            'properties_listed',
+            'property_sold',
+            'cities_covered',
+            'updated_at',
+        ]
+ 

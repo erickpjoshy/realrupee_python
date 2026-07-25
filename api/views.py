@@ -425,7 +425,7 @@ class DeleteGalleryImageAPIView(APIView):
 
 
 class PropertyPagination(PageNumberPagination):
-    page_size = 10  # default items per page
+    page_size = 12  # default items per page
     page_size_query_param = 'page_size'  # allow client to change
     max_page_size = 100
 
@@ -486,3 +486,13 @@ class PropertySearchAPIView(APIView):
             })
 
         return paginator.get_paginated_response(data)
+
+
+
+class HomepageStatsAPIView(APIView):
+ 
+    def get(self, request):
+        homepage_stats = HomepageStats.get_solo()
+        serializer = HomepageStatsSerializer(homepage_stats)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+ 
