@@ -145,9 +145,8 @@ class AmenityForm(forms.ModelForm):
         fields = ['name', 'icon']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Swimming Pool'}),
+            'icon': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
-
-
 
 class HomepageStatsForm(forms.ModelForm):
     class Meta:

@@ -8,12 +8,22 @@
   </div>
   <div class="card-body">
     <div class="card-wrapper border rounded-3">
-      <form method="post" class="row g-3">
+      <form method="post" enctype="multipart/form-data" class="row g-3">
         {% csrf_token %}
 
         <div class="col-md-6">
           <label for="{{ form.name.id_for_label }}" class="form-label required-label">Name</label>
           {{ form.name }}
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.icon.id_for_label }}" class="form-label">Icon</label>
+          {{ form.icon }}
+          {% if amenity and amenity.icon %}
+            <div class="mt-2">
+              <img src="{{ amenity.icon.url }}" alt="{{ amenity.name }}" width="40">
+            </div>
+          {% endif %}
         </div>
 
         <div class="col-12">

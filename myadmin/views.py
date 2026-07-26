@@ -606,7 +606,7 @@ def amenity_list(request):
 
 def amenity_create(request):
     if request.method == "POST":
-        form = AmenityForm(request.POST)
+        form = AmenityForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('amenity-list')
@@ -620,7 +620,7 @@ def amenity_create(request):
 def amenity_update(request, pk):
     amenity = get_object_or_404(Amenity, pk=pk)
     if request.method == "POST":
-        form = AmenityForm(request.POST, instance=amenity)
+        form = AmenityForm(request.POST, request.FILES, instance=amenity)
         if form.is_valid():
             form.save()
             return redirect('amenity-list')
@@ -629,7 +629,6 @@ def amenity_update(request, pk):
     else:
         form = AmenityForm(instance=amenity)
     return render(request, 'amenity-form.html', {'form': form, 'amenity': amenity})
-
 
 def amenity_delete(request, pk):
     amenity = get_object_or_404(Amenity, pk=pk)
